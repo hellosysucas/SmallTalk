@@ -16,6 +16,6 @@
 
 ----------
 
-1. 在自己的机子上生成ssh，并与自己的帐号关联，记住不是与公共仓库的帐号关联，因为已经在该项目将小组成员添加为贡献者了，所以只要与自己的帐号关联就行了。附权限问题的解决方案http://stackoverflow.com/questions/12940626/github-error-message-permission-denied-publickey和官网教程：https://help.github.com/articles/generating-ssh-keys
+1. 在自己的机子上生成ssh，并与自己的帐号关联，记住不是与公共仓库的帐号关联，因为已经在该项目将小组成员添加为贡献者了，所以只要与自己的帐号关联就行了。附权限问题的解决方案http://stackoverflow.com/questions/12940626/github-error-message-permission-denied-publickey 和官网教程：https://help.github.com/articles/generating-ssh-keys
 
-2.  关于如何提交项目，涉及在公共仓库中**删除**和添加文件，参考以下网址：http://www.cnblogs.com/fnng/archive/2012/01/07/2315685.html。需要注意的点是在push前要先pull下来，然后解决与公共仓库的代码冲突才能push上去。
+2.  关于如何提交项目，涉及在公共仓库中**删除**和添加文件，参考以下网址：http://www.cnblogs.com/fnng/archive/2012/01/07/2315685.html 。需要注意的点是在push前要先pull下来，然后解决与公共仓库的代码冲突才能push上去。
