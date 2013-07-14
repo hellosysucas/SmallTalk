@@ -108,3 +108,7 @@ def exchangeUserMessage(request):
         
     userMessage = getUserMessage(uid)    
     return render_to_response('exchangeUserMessage.html',{'uid':uid,'message':userMessage})
+
+def index(request):
+    #return HttpResponse('hello')
+    return render_to_response('index.html',{})

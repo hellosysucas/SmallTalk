@@ -18,4 +18,3 @@ urlpatterns = patterns('',
     url(r'^friends/',views.friends),
     url(r'^exchangeUserMessage/',views.exchangeUserMessage),
 )
-
