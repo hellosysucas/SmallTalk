@@ -1,3 +1,11 @@
+#Mon Jul 15 09:15:00 CST 2013
 eclipse.preferences.version=1
 encoding//SmallTalk/settings.py=utf-8
+encoding//mytalk/models.py=utf-8
 encoding//mytalk/urls.py=utf-8
+encoding//mytalk/views.py=utf-8
+encoding//static/js/check_input.js=UTF-8
+encoding//templates/exchangeUserMessage.html=UTF-8
+encoding//templates/friends.html=UTF-8
+encoding//templates/header.html=UTF-8
+encoding//templates/index.html=UTF-8
