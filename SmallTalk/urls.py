@@ -17,3 +17,4 @@ urlpatterns = patterns('',
 	#url(r'^mytalk/',include('mytalk.urls')),
     url(r'^',include('mytalk.urls')),
 )
+

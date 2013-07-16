@@ -52,7 +52,7 @@ function check_login_password(password,message_container_id){
     $('#'+ message_container_id).html("");
     return true;
 }
-    
+
 function check_login(){
     var username = $("#username").val();
     var password = $("#password").val();
@@ -74,6 +74,7 @@ function check_login(){
         );
     }
 }
+
 function check_update_password(updatePassword,message_container_id){
     $('#'+ message_container_id).html("");
     password = $('#password').val();

@@ -5,50 +5,116 @@ from urllib import unquote
 from django.template.loader import get_template
 from django.shortcuts import render_to_response
 from django.core.context_processors import csrf
-import datetime
 import hashlib
+import datetime, re
 from django import forms
 from django.http import HttpResponseRedirect
 from mytalk.models import User,Store,Label,Comment,Reply,LabelInline,StoreAdmin
 
 #判断用户名是否格式合法
 def is_uid_name_valid(uid):
-    return True
+    pattern = re.compile(r'[A-Za-z](\w|_| )*')
+    
+    if pattern.match(uid) and len(uid) <= 20:
+        return True
+    return False
     
 #判断邮箱格式是否合法
 def is_email_name_valid(email):
-    return True
+    pattern = re.compile(r'\w*@(\w)+.(com|cn|org)')
+    
+    if pattern.match(email) and len(email) <= 20:
+        return True
+    return False
 
-#更新用户id为新的newid,true代表成功,需要验证用户名id的格式是否合法
-def update_user_id(uid,newUid):
-    return True
-
-#更新用户uid的邮箱为email,需要验证email的格式是否合法
-def update_user_email(uid,email):
-    return True
-
-#更新用户uid的密码为新的密码password
-def update_user_password(uid,password):
-    return True
+#判断密码是否合法
+def is_password_valid(password):
+    pattern = re.compile(r'\w+')
+    
+    if pattern.match(password) and len(password) <= 20:
+        return True
+    return False
 
 #判断某个用户名是否已经存在
 def is_uid_exist(uid):
+    user = User.objects.filter(id = uid)
+    if len(user) == 1:
+        return True  
     return False
 
 #判断用户是否合法,需要先验证uid和upassword是否为空等格式是否正确
 def is_user_valid(uid,upassword):
-    return True
+    if is_uid_name_valid(uid) and is_password_valid(upassword) and is_uid_exist(uid):
+        user = User.objects.get(id = uid)
+        if user.password == upassword:
+            return True
+    return False
+
+#更新用户id为新的newid,true代表成功,需要验证用户名id的格式是否合法
+def update_user_id(uid,newUid):
+    try:
+        user = User.objects.get(id = uid)
+        
+        if is_uid_exist(newUid) == False and is_uid_name_valid(newUid):
+            user.id = newUid
+            user.save()
+            print "save id"
+            User.objects.filter(id = uid).delete()
+            return True
+    except:
+        print "more than one or does not exit"    
+        
+    return False
+
+#更新用户uid的邮箱为email,需要验证email的格式是否合法
+def update_user_email(uid,email):
+    try:
+        user = User.objects.get(id = uid)
+        if is_email_name_valid(email):
+            user.email = email
+            user.save()
+            print "save email"
+            return True               
+    except:
+        print uid + "more than one or does not exit"
+    
+    return False
+
+#更新用户uid的密码为新的密码password
+def update_user_password(uid, password):
+    try:
+        user = User.objects.get(id = uid)
+        if is_password_valid(password):
+            user.password = password
+            user.save()
+            print "save password"
+            return True
+    except:
+        print uid + "more than one or does not exit"
+    return False
 
 #获得用户信息,包括用户邮箱Email
 def getUserMessage(uid):
-    message = {'uid':uid,'email':'123@qq.com'}
-    return message
+    try:
+        user = User.objects.get(id = uid)
+        return {'uid':user.id, 'email':user.email}
+    except:
+        return {'uid':uid, 'email':''}
 
 #获得用户uid的好友列表
 def getFriendsList(uid):
-    myFriendsObj= ['aa','bb','cc','dd']
-    return myFriendsObj
-    
+    friends = []
+    try:
+        user = User.objects.get(id = uid)
+        friendsList = user.friends.all()
+        
+        print friendsList
+        for i in friendsList:
+            friends.append(i.id)
+    except:
+        print uid + "more than one or does not exit"
+    return friends
+
 #获得某个人的所有评论过的商店的所有评论
 def getUserComments(uid):
     comment1 = ["good","very good","not bad"]
@@ -216,4 +282,4 @@ def doRegister(request):
             return HttpResponse("用户名已存在")
     else:
         return HttpResponse("false")
-		
+        

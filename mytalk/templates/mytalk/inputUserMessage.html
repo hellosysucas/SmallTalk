@@ -1,0 +1,19 @@
+<p>
+    <label>username:<input placeholder="输入英文字符，数字，或中文" id="username" name="username" type="text" value="{{ message.uid }}" maxlength="20" onkeyup="check_uname(this.value,'wrongChar')"/></label>
+    <span id="wrongChar">{{ message.isUsername }}</span>
+</p>
+                
+<p>
+    <label>Email:<input onkeyup="check_email(this.value,'wrongEmail')" placeholder="输入合法邮箱" id="email" name="email" type="email" value="{{ message.email }}"/></label>
+    <span id="wrongEmail">{{ message.isEmail}}</span>
+</p>
+                
+<p>
+    <label>password:<input onkeyup="check_login_password(this.value,'wrongPassword')" placeholder="输入合法密码" id="password" name="password" type="password" value=""/></label>
+    <span id="wrongPassword">{{ message.isPassword }}</span>
+</p>
+                
+<p>
+    <label>password:<input onkeyup="check_update_password(this.value,'wrongUpdatePassword')" placeholder="输入合法密码" id="updatePassword" name="updatePassword" type="password" value=""/></label>
+    <span id="wrongUpdatePassword">{{ message.isPassword }}</span>
+</p>
