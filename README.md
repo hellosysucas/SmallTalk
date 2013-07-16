@@ -28,7 +28,6 @@
 参考网址：https://docs.djangoproject.com/en/1.5/intro/tutorial06/<br/>
 1. 在想导入静态文件的文件的页面最上方添加{% load staticfiles %}<br/>
 2. 将静态文件放在static文件夹中对应文件夹下<br/>
-3. 导入语句举例：<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" /><br/>
 
 #关于Wiki Page
 
