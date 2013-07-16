@@ -20,6 +20,16 @@
 
 2.  关于如何提交项目，涉及在公共仓库中**删除**和添加文件，参考以下网址：http://www.cnblogs.com/fnng/archive/2012/01/07/2315685.html 。需要注意的点是在push前要先pull下来，然后解决与公共仓库的代码冲突才能push上去。
 
+#使静态文件生效
+
+
+----------
+
+参考网址：https://docs.djangoproject.com/en/1.5/intro/tutorial06/<br/>
+1. 在想导入静态文件的文件的页面最上方添加{% load staticfiles %}
+2. 将静态文件放在static文件夹中对应文件夹下
+3. 导入语句举例：<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
+
 #关于Wiki Page
 
 
