@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+{% load staticfiles %}
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
 		<title>登录 &middot; 小众点评</title>
 		
-		<link href="css/bootstrap.css" rel="stylesheet">
-		<link href="css/bootstrap-responsive.css" rel="stylesheet">
+		<link href="{% static 'mytalk/css/bootstrap.css' %}" rel="stylesheet">
+		<link href="{% static 'mytalk/css/bootstrap-responsive.css' %}" rel="stylesheet">
     	<style type="text/css">
       		body {
         		padding-top: 40px;
@@ -44,11 +45,16 @@
 	
 	<body>
 		<div class="container">
-			<form class="form-signin">
+			<form class="form-signin" action="{% url 'index' %}" method="post">
 				<h2 class="form-signin-heading">Please sign in</h2>
-        		<input type="text" class="input-block-level" placeholder="User name">
-        		<input type="password" class="input-block-level" placeholder="Password">
-        		<button class="btn btn-large btn-primary" type="submit">Sign in</button>
+        		<input type="text" class="input-block-level" placeholder="User name"
+        			name='username' value="" maxlength="20" onkeyup="check_uname(this.value,'wrongChar')">
+        		<input type="password" class="input-block-level" placeholder="Password"
+        			name="password" value="" maxlength="20" onkeyup="check_login_password(this.value,'wrongPassword')">
+        		<button class="btn btn-large btn-primary" type="submit"
+        			onclick="check_login_password(this.value,'wrongPassword')">
+        			Sign in
+        		</button>
      		 </form>
 		</div>
 	</body>

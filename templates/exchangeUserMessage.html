@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+		<meta charset="utf-8"/>
+        <title>大众点评</title>
+        <link rel="stylesheet" type="text/css" href="/site_media/css/style.css" />
+        <script src="/site_media/js/jquery.js" type="text/javascript"></script>
+        <script src="/site_media/js/check_input.js" type="text/javascript"></script>
+    </head>
+    
+    <body>
+        {% include 'header.html' %}
+        <div>
+            显示当前用户信息，并能够修改用户信息
+            <form method="post" action="../exchangeUserMessage/">
+                <p>
+                    <label>username:<input placeholder="输入英文字符，数字，或中文" id="username" name="username" type="text" value="{{ message.uid }}" maxlength="20" onkeyup="check_uname(this.value,'wrongChar')"/></label>
+                    <span id="wrongChar">{{ message.isUsername }}</span>
+                </p>
+                
+                <p>
+                    <label>Email:<input onkeyup="check_email(this.value,'wrongEmail')" placeholder="输入合法邮箱" id="email" name="email" type="email" value="{{ message.email }}"/></label>
+                    <span id="wrongEmail">{{ message.isEmail}}</span>
+                </p>
+                
+                <p>
+                    <label>password:<input onkeyup="check_login_password(this.value,'wrongPassword')" placeholder="输入合法密码" id="password" name="password" type="password" value=""/></label>
+                    <span id="wrongPassword">{{ message.isPassword }}</span>
+                </p>
+                
+                <p>
+                    <label>password:<input onkeyup="check_update_password(this.value,'wrongUpdatePassword')" placeholder="输入合法密码" id="password" name="updatePassword" type="password" value=""/></label>
+                    <span id="wrongUpdatePassword">{{ message.isPassword }}</span>
+                </p>
+                
+                <p>
+                    <input type="submit" value="提交"/>
+                </p>
+            </form>
+        </div>
+    </body>
+</html>

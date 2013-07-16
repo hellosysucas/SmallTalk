@@ -2,78 +2,88 @@
 {% load staticfiles %}
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
+	<head>	
 		<title>欢迎来到小众点评网</title>
-
+		<!-- 添加合适的meta标签，与响应式CSS搭配 -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Bootstrap -->
 		<link href="{% static 'mytalk/css/bootstrap.css' %}" rel="stylesheet">
-		<link href="{% static 'mytalk/css/bootstrap-responsive.css' %}" rel="stylesheet">
+		<!-- 设置导航栏和布局之间的间隔 -->
 		<style type="text/css">
 			body {
 				padding-top: 60px;
 				padding-bottom: 20px;
 			}
-
+	
 			.sidebar-nav {
 				padding: 9px 0;
 			}
-
 		</style>
+		<link href="{% static 'mytalk/css/bootstrap-responsive.css' %}" rel="stylesheet"><!-- 启用响应式CSS -->	
 	</head>
 
 	<body>
-		<div class="navbar navbar-inverse navbar-fixed-top">
-			<div class="navbar-inner">
-				<div class="container">
-					<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+		<!-- 导航栏 -->
+		<div class="navbar navbar-inverse navbar-fixed-top"><!-- 导航条，反色，固定在顶部 -->
+			<div class="navbar-inner"><!-- 导航条内容 -->
+				<div class="container"><!-- 响应式导航条 -->
+					
+					<!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><!-- 触发按钮 -->
 						<span class="icon-bar"> </span>
 						<span class="icon-bar"> </span>
 						<span class="icon-bar"> </span>
-					</button>
+					</a>
+					
+					 <!-- Be sure to leave the brand out there if you want it shown -->
 					<a class="brand" href="#">小众点评</a>
+					
+					<!-- Everything you want hidden at 940px or less, place within here -->
 					<div class="nav-collapse collapse">
+						<!-- .nav, .navbar-search, .navbar-form, etc -->
 						<ul class="nav">
-							<li class="active">
-								<a href="#">首页</a>
-							</li>
-							<li>
-								<a href="#about">关于</a>
-							</li>
-							<li>
-								<a href="#contact">联系</a>
-							</li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<li class="active"><a href="#">首页</a></li>
+							<li><a href="#about">关于</a></li>
+							<li><a href="#contact">联系</a></li>
+							<li class="dropdown"><!-- 下拉菜单 -->
+								<a class="dropdown-toggle" data-toggle="dropdown" href="#" >
 									其他 
 									<b class="caret"> </b>
 								</a>
 								<ul class="dropdown-menu">
-									<li>
-										<a href="#">操作1</a>
-									</li>
-									<li>
-										<a href="#">操作2</a>
-									</li>
-									<li>
-										<a href="#">操作3</a>
-									</li>
+									<li><a href="#">操作1</a></li>
+									<li><a href="#">操作2</a></li>
+									<li><a href="#">操作3</a></li>
 								</ul>
 							</li>
 						</ul>
-						<form class="form-search navbar-form pull-right">
+						
+						<form method="post" action="../" class="form-search navbar-form pull-right">
+							<!-- 搜索 -->
 							<input type="text" class="input-medium search-query">
 							<button type="submit" class="btn">
 								Search
 							</button>
-							<a class="navbar-link" href="#">未登录</a>
-							<a class="btn" href="#">登录</a>
-							<a class="btn" href="#">退出</a>
+							<!-- 登录信息显示 -->
+							{% ifnotequal uid '' %}
+								<a class="navbar-link" href="../exchangeUserMessage">{{uid}}</a>
+								<a class="btn" href="../friends">好友管理</a>
+							<!-- 非登录信息显示 -->
+							{% else %}
+								<a class="navbar-link" href="#">未登录</a>
+								<a class="btn" href="{% url 'signIn' %}">登录</a>
+							{% endifnotequal %}
+							<!-- 退出 -->
+							<input id="ope" name="ope" value="exit"/>
+							<button type="submit">退出</button>
 						</form>
+						
 					</div>
 				</div>
 			</div>
 		</div>
 
+		<!-- 固定布局 -->
 		<div class="container-fluid">
 			<div class="row-fluid">
 				<div class="span3">
@@ -196,20 +206,8 @@
 				</p>
 			</footer>
 		</div>
-
-		<script src="../assets/js/jquery.js"></script>
-		<script src="../assets/js/bootstrap-transition.js"></script>
-		<script src="../assets/js/bootstrap-alert.js"></script>
-		<script src="../assets/js/bootstrap-modal.js"></script>
-		<script src="../assets/js/bootstrap-dropdown.js"></script>
-		<script src="../assets/js/bootstrap-scrollspy.js"></script>
-		<script src="../assets/js/bootstrap-tab.js"></script>
-		<script src="../assets/js/bootstrap-tooltip.js"></script>
-		<script src="../assets/js/bootstrap-popover.js"></script>
-		<script src="../assets/js/bootstrap-button.js"></script>
-		<script src="../assets/js/bootstrap-collapse.js"></script>
-		<script src="../assets/js/bootstrap-carousel.js"></script>
-		<script src="../assets/js/bootstrap-typeahead.js"></script>
-
+		<script src="{% static 'mytalk/js/jquery.js' %}" ></script>
+		<script src="{% static 'mytalk/js/bootstrap.js' %}" ></script>
 	</body>
+	
 </html>
