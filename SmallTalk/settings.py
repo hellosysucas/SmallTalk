@@ -156,5 +156,5 @@ LOGGING = {
         },
     }
 }
-STATIC_PATH='E:\\projects\\SmallTalk\\static'
+
 
