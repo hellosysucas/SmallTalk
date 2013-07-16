@@ -128,24 +128,24 @@ def index(request):
             uid = ''
     elif request.session.get('uid') != None:
         uid = request.session.get('uid')
-    return render_to_response('index.html',{'uid':uid})
+    return render_to_response('mytalk/index.html',{'uid':uid})
 
 '''显示好友列表''' 
 def friends(request):
     uid = ''
     if request.session.get('uid') == None:
-        return render_to_response('index.html',{'uid':uid})
+        return render_to_response('mytalk/index.html',{'uid':uid})
 
     uid = request.session.get('uid')
     myFriendsObj = getFriendsList(uid)
     
-    return render_to_response('friends.html',{'uid':uid,'friendsList':myFriendsObj})
+    return render_to_response('mytalk/friends.html',{'uid':uid,'friendsList':myFriendsObj})
         
 '''更改用户信息'''
 def exchangeUserMessage(request):
     uid = ''
     if request.session.get('uid') == None:
-        return render_to_response('index.html',{'uid':uid})
+        return render_to_response('mytalk/index.html',{'uid':uid})
     
     uid = request.session.get('uid')
     userMessage = getUserMessage(uid)
@@ -172,11 +172,11 @@ def exchangeUserMessage(request):
             if update_user_id(uid, request.POST.get('username')):
                 uid =  request.session['uid'] = request.POST.get('username')
         
-        return render_to_response('exchangeUserMessage.html',{'uid':uid,'message':message})
+        return render_to_response('mytalk/exchangeUserMessage.html',{'uid':uid,'message':message})
         
     userMessage = getUserMessage(uid)    
-    return render_to_response('exchangeUserMessage.html',{'uid':uid,'message':userMessage})
+    return render_to_response('mytalk/exchangeUserMessage.html',{'uid':uid,'message':userMessage})
 
 def signIn(request):
-    return render_to_response('signIn.html',{})
+    return render_to_response('mytalk/signIn.html',{})
 
