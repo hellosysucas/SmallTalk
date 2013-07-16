@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+{% load staticfiles %}
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>register</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'mytalk/css/style.css' %}" />
+        <link href="{% static 'mytalk/css/bootstrap.css' %}" rel="stylesheet">
+        <link href="{% static 'mytalk/css/bootstrap-responsive.css' %}" rel="stylesheet"><!-- 启用响应式CSS -->	
+        <script src="{% static 'mytalk/js/jquery.js' %}" type="text/javascript"></script>    
+        <script src="{% static 'mytalk/js/sha1.js' %}" type="text/javascript"></script>
+        <script src="{% static 'mytalk/js/check_input.js' %}" type="text/javascript"></script>
+    </head>
+    <body>
+        {% include "header.html" %}
+        {% include "inputUserMessage.html" %}
+		<span id="showError"></span>
+        <p><button onclick="check_register()">注册</button></p>
+    </body>
+</html>
