@@ -25,9 +25,10 @@
 
 ----------
 
-参考网址：https://docs.djangoproject.com/en/1.5/intro/tutorial06/<br/>
-1. 在想导入静态文件的文件的页面最上方添加{% load staticfiles %}<br/>
-2. 将静态文件放在static文件夹中对应文件夹下<br/>
+1. 参考网址：https://docs.djangoproject.com/en/1.5/intro/tutorial06/
+2. 在想导入静态文件的文件的页面最上方添加{% load staticfiles %}
+3. 将静态文件放在static文件夹中对应文件夹下
+4. 举例：`<link href="{% static 'mytalk/css/bootstrap.css' %}" rel="stylesheet">`
 
 #关于Wiki Page
 
@@ -37,3 +38,24 @@
 1. 介绍和使用，http://www.worldhello.net/gotgithub/04-work-with-others/060-wiki.html 
 2. Wiki Page使用的Markdown 语法说明：http://wowubuntu.com/markdown/
 3. 建议先在一个Markdown的实时显示网站上写Page:http://benweet.github.io/stackedit/#
+
+#接下来的任务
+
+
+----------
+
+1. 爬取大众点评的相关数据，填充数据库，考虑到时间关系，可手工收集
+2. 实现首页上各个控件的点击及页面跳转
+  * 填充商店名和评论以及细节显示
+	* 实现添加点评功能
+	* 在首页增加添加点评时的选择可见性和商户功能
+	* 在好友圈显示好友列表
+	* 在热门点评商户显示商户列表
+3. 添加商户信息页面
+4. 优化好友管理页面
+5. 优化用户信息管理页面
+6. 优化系统管理页面
+7. 增加测试
+8. 挂载服务器
+9. 撰写文档
+10. 提交到Soya 
