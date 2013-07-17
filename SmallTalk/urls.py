@@ -4,7 +4,7 @@ from mytalk import views
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',                   
+urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'SmallTalk.views.home', name='home'),
     # url(r'^SmallTalk/', include('SmallTalk.foo.urls')),
