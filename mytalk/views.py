@@ -208,7 +208,7 @@ def message(request):
     friend = request.POST.get('username')
     
     talk = getUserComments(uid)
-    return render_to_response('mytalk/message.html',{'uid':uid,'friend':friend,'talk':talk})
+    return render_to_response('mytalk/showUserComments.html',{'uid':uid,'friend':friend,'talk':talk})
     
 '''删除用户uid的某个好友,返回的结果为一个true 或者是 false，true代表删除成功'''
 def deleteFriend(request):
