@@ -1,9 +1,6 @@
 <!DOCTYPE HTML>
 {% load staticfiles %}
-<<<<<<< HEAD
 <!--主题页面，被显示的主页面-->
-=======
->>>>>>> ebb75c24da3c283b4f11b1a989330e0177c466d7
 <html>
 	<head>
         <title>欢迎来到小众点评网</title>
@@ -24,7 +21,6 @@
 		</style>
 		<link href="{% static 'mytalk/css/bootstrap-responsive.css' %}" rel="stylesheet"><!-- 启用响应式CSS -->	
         <link rel="stylesheet" type="text/css" href="{% static 'mytalk/css/style.css' %}" />
-<<<<<<< HEAD
         <script src="{% static 'mytalk/js/jquery.js' %}" type="text/javascript"></script>    
         <script src="{% static 'mytalk/js/sha1.js' %}" type="text/javascript"></script>
         <script src="{% static 'mytalk/js/check_input.js' %}" type="text/javascript"></script>
@@ -36,25 +32,10 @@
         <!-- 固定布局 -->
 		<div class="container-fluid">
 			<div class="row-fluid">
-=======
-        
-        <script src="{% static 'mytalk/js/jquery.js' %}" type="text/javascript"></script>    
-        <script src="{% static 'mytalk/js/sha1.js' %}" type="text/javascript"></script>
-        <script src="{% static 'mytalk/js/check_input.js' %}" type="text/javascript"></script>
-	</head>
-    
-	<body>
-        {% include 'mytalk/header.html'%}
-        <!-- 固定布局 -->
-		<div class="container-fluid">
-			<div class="row-fluid">
-				<!-- 侧边栏 -->
->>>>>>> ebb75c24da3c283b4f11b1a989330e0177c466d7
 				<div class="span3">
 					<div class="well sidebar-nav">
 						<ul class="nav nav-list">
 							<h3>热门点评商户</h3>
-<<<<<<< HEAD
 							{% for each in hostStore %}
                                 <li>
                                     <a id="{{ each.name }}" onclick="showStoreMessage(this)"> {{ each.name }}</a>
@@ -86,62 +67,3 @@
 		</div>
 	</body>
 </html>
-=======
-							<li><a href="#">Name</a></li>
-						</ul>
-					</div>
-					
-					<div class="well sidebar-nav">
-						<ul class="nav nav-list">
-							<h3>好友圈</h3>
-							<li><a href="#">Link</a></li>
-						</ul>
-					</div>
-				</div>
-				
-				<!-- 主栏 -->
-				<div class="span9">
-					<!-- 点评发表框 -->
-					<div class="hero-unit">
-						<h4>请输入您的评论</h4>
-						<textarea class="span12" rows="5"> </textarea>
-						
-						<!-- 点评可见性 -->
-						<div class="span2 pull-right">
-							<div class="span6 dropdown pull-left">
-								<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-									公共 
-									<b class="caret"> </b>
-								</a>
-								<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-									<li><a href="#">好友圈</a></li>
-								</ul>
-							</div>
-							
-							<button type="submit" class=" btn btn-primary pull-right">提交</button>
-						</div>
-					</div>
-					<!-- 点评显示框 -->
-					<div class="row-fluid">
-						<div class="span6">
-							<h2>商店名1</h2>
-							<p>评论1</p>
-							<p><a class="btn" href="#">View details &raquo;</a></p>
-						</div>
-						<div class="span6">
-							<h2>商店名1</h2>
-							<p>评论2</p>
-							<p><a class="btn" href="#">View details &raquo;</a></p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		{% include "mytalk/footer.html" %}
-		
-		<!-- 此句脚本要放在后面，不然会使得该js文件无效 -->
-		<script src="{% static 'mytalk/js/bootstrap.js' %}" type="text/javascript"></script>
-	</body>
-</html>
-
->>>>>>> ebb75c24da3c283b4f11b1a989330e0177c466d7
