@@ -1,0 +1,39 @@
+#header {
+    height:25px;
+    background-color:yellow;
+    font-size:15pt;
+    text-align:right;
+}
+#ope {
+    display:none;
+}
+
+#header_exit {
+    float:right;
+    margin-left:10px;
+    margin-right:10px;
+}
+
+#wrongChar,#wrongEmail,#wrongPassword,#wrongUpdatePassword,#showError{
+    color:red;
+}
+
+.eachFriend {
+    background-color:white;
+    border:1px solid black;
+    width:100%;
+}
+
+#showFriendsList {
+    float:left;
+    width:10%;
+    border:1px solid green;
+    overflow:hidden;   
+}
+
+#showUserMessage {
+    float:left;
+    width:85%;
+    margin:10px;
+    border:1px solid green;
+}
