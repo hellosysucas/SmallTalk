@@ -52,15 +52,30 @@
                     
 				</div>
 				<div class="span9">
+					<!-- 点评发表框 -->
 					<div class="hero-unit">
 						<h4>请输入您的评论</h4>
-						<textarea class="span12" rows="5"></textarea>
-                        
-						<button type="submit" class="btn btn-primary">
-							提交
-						</button>
+						<textarea class="span12" rows="5"> </textarea>												
+			            
+ 						<!-- 点评可见性 -->
+						<div class="span2 pull-right">
+							<div class="span6 dropdown pull-left">
+								<a class="dropdown-toggle" data-toggle="dropdown" href="#"> 公共 <b class="caret"> </b> </a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+									<li>
+										<a href="#">好友圈</a>
+									</li>
+								</ul>
+							</div>
+
+							<button type="submit" class=" btn btn-primary pull-right">
+								提交
+							</button>
+						</div>
 					</div>
-					<div id="showComments"><!--显示商店和评论--></div>
+					<div id="showComments">
+						<!--显示商店和评论-->
+					</div>
 				</div>
 			</div>
         {% include "mytalk/footer.html" %}
