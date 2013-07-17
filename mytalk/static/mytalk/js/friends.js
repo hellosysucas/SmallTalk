@@ -1,30 +1,35 @@
 var nowFriend = "";
 var myself = "";
+var oldStore = "";
 $(function(){
-    myself = nowFriend = $("#myself").val();
-    $("#"+nowFriend).css("background-color","yellow");
-    $("#myself").css("background-color","yellow");
-    getMessage(myself);
+    if ($("#myself").html()){
+        myself = nowFriend = $("#myself").html();
+        $("#myself").css("background-color","yellow");
+        getUserCommentMessage(myself);
+    }
 })
 
-function getMessage(uid){
+function getUserCommentMessage(uid){
     $.post("../friends/message/",{'username':uid},function(data){
-		$("#showUserMessage").html(data);
+		$("#showComments").html(data);
 	});
 }
 
-function showMessage(friend){
-    $("#showUserMessage").html(friend);
-    $("#"+nowFriend).css("background-color","white");
+function showMessage(event){
+    //$("#showUserMessage").html(friend);
+    $("#"+oldStore).css("background-color","");
+    $("#"+nowFriend).css("background-color","");
     if (nowFriend == myself)
-        $("#myself").css("background-color","white");
+        $("#myself").css("background-color","");
+    friend = event.id;
+
     $("#"+friend).css("background-color","yellow");
     
     if (friend == myself)
         $("#myself").css("background-color","yellow");
     nowFriend = friend;
     
-    getMessage(friend);
+    getUserCommentMessage(friend);
 }
 
 function deleteFriend(){
@@ -33,4 +38,20 @@ function deleteFriend(){
             window.open("../","_self");
     });
     window.open("../friends/","_self");
+}
+
+function showStoreMessage(event){
+    id = event.id;
+    
+    $("#"+id).css("background-color","yellow");
+    $("#"+nowFriend).css("background-color","");
+    if (nowFriend == myself)
+        $("#myself").css("background-color","");
+    if (oldStore != "")
+        $("#"+oldStore).css("background-color","");
+        
+    oldStore = id;
+    $.post("../getStoreMessage/",{'store':oldStore},function(data){
+        $("#showComments").html(data);
+    });
 }

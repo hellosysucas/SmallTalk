@@ -1,3 +1,4 @@
+<!-- 用户注册，以及用户信息修改的信息输入页面 -->
 <p>
     <label>username:<input placeholder="输入英文字符，数字，或中文" id="username" name="username" type="text" value="{{ message.uid }}" maxlength="20" onkeyup="check_uname(this.value,'wrongChar')"/></label>
     <span id="wrongChar">{{ message.isUsername }}</span>

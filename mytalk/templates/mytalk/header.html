@@ -1,3 +1,4 @@
+<!--显示标题栏信息，用在 include 中-->
 <div class="navbar navbar-inverse navbar-fixed-top"><!-- 导航条，反色，固定在顶部 -->
     <div class="navbar-inner"><!-- 导航条内容 -->
 		<div class="container"><!-- 响应式导航条 -->
@@ -33,16 +34,18 @@
 				</ul>
                 <div class="form-search navbar-form pull-right">
                     <input type="text" class="input-medium search-query">
-                    <button type="submit" class="btn">查找</button>
+                    <button type="submit" class="btn">
+                        Search
+                    </button>
                             
                     {% ifnotequal uid "" %}
-                        <a class="navbar-link" href="../exchangeUserMessage">{{uid}}</a>
-                        <a class="btn" href="../friends">好友管理</a>
-                        {% else %}
-                            <a class="btn" href="../signIn">登录</a>
-                            <a class="btn" href="../register/">注册</a>
-                        {% endifnotequal %}
-                        <a class="btn" onclick="operation_exit()" href="#">退出</a>
+                    <a class="navbar-link" href="../exchangeUserMessage">{{uid}}</a>
+                    <a class="btn" href="../friends">好友管理</a>
+                    {% else %}
+                        <a class="btn" href="../signIn">登录</a>
+                        <a class="navbar-link" href="../register/">注册</a>
+                    {% endifnotequal %}
+                    <a class="btn" onclick="operation_exit()" href="#">退出</a>
                  </div>
             </div>
 		</div>

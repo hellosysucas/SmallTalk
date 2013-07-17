@@ -15,6 +15,8 @@ urlpatterns = patterns('',
     #url(r'^site_media/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.STATIC_PATH}),
     url(r'^$',views.index,name='index'),
     url(r'^signIn/$',views.signIn),
+    
+    url(r'^getStoreMessage/$',views.getStoreMessage),
     url(r'^detectLogin/$',views.detectLogin),
     url(r'^exitOperation/$',views.exitOperation),
     
@@ -27,4 +29,3 @@ urlpatterns = patterns('',
 	
     url(r'^exchangeUserMessage/$',views.exchangeUserMessage),
 )
-

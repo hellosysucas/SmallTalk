@@ -13,107 +13,41 @@ from mytalk.models import User,Store,Label,Comment,Reply,LabelInline,StoreAdmin
 
 #判断用户名是否格式合法
 def is_uid_name_valid(uid):
-    pattern = re.compile(r'[A-Za-z](\w|_| )*')
-    
-    if pattern.match(uid) and len(uid) <= 20:
-        return True
-    return False
+    return True
     
 #判断邮箱格式是否合法
 def is_email_name_valid(email):
-    pattern = re.compile(r'\w*@(\w)+.(com|cn|org)')
-    
-    if pattern.match(email) and len(email) <= 20:
-        return True
-    return False
+    return True
 
-#判断密码是否合法
-def is_password_valid(password):
-    pattern = re.compile(r'\w+')
-    
-    if pattern.match(password) and len(password) <= 20:
-        return True
-    return False
+#更新用户id为新的newid,true代表成功,需要验证用户名id的格式是否合法
+def update_user_id(uid,newUid):
+    return True
+
+#更新用户uid的邮箱为email,需要验证email的格式是否合法
+def update_user_email(uid,email):
+    return True
+
+#更新用户uid的密码为新的密码password
+def update_user_password(uid,password):
+    return True
 
 #判断某个用户名是否已经存在
 def is_uid_exist(uid):
-    user = User.objects.filter(id = uid)
-    if len(user) == 1:
-        return True  
     return False
 
 #判断用户是否合法,需要先验证uid和upassword是否为空等格式是否正确
 def is_user_valid(uid,upassword):
-    if is_uid_name_valid(uid) and is_password_valid(upassword) and is_uid_exist(uid):
-        user = User.objects.get(id = uid)
-        if user.password == upassword:
-            return True
-    return False
-
-#更新用户id为新的newid,true代表成功,需要验证用户名id的格式是否合法
-def update_user_id(uid,newUid):
-    try:
-        user = User.objects.get(id = uid)
-        
-        if is_uid_exist(newUid) == False and is_uid_name_valid(newUid):
-            user.id = newUid
-            user.save()
-            print "save id"
-            User.objects.filter(id = uid).delete()
-            return True
-    except:
-        print "more than one or does not exit"    
-        
-    return False
-
-#更新用户uid的邮箱为email,需要验证email的格式是否合法
-def update_user_email(uid,email):
-    try:
-        user = User.objects.get(id = uid)
-        if is_email_name_valid(email):
-            user.email = email
-            user.save()
-            print "save email"
-            return True               
-    except:
-        print uid + "more than one or does not exit"
-    
-    return False
-
-#更新用户uid的密码为新的密码password
-def update_user_password(uid, password):
-    try:
-        user = User.objects.get(id = uid)
-        if is_password_valid(password):
-            user.password = password
-            user.save()
-            print "save password"
-            return True
-    except:
-        print uid + "more than one or does not exit"
-    return False
+    return True
 
 #获得用户信息,包括用户邮箱Email
 def getUserMessage(uid):
-    try:
-        user = User.objects.get(id = uid)
-        return {'uid':user.id, 'email':user.email}
-    except:
-        return {'uid':uid, 'email':''}
+    message = {'uid':uid,'email':'123@qq.com'}
+    return message
 
 #获得用户uid的好友列表
 def getFriendsList(uid):
-    friends = []
-    try:
-        user = User.objects.get(id = uid)
-        friendsList = user.friends.all()
-        
-        print friendsList
-        for i in friendsList:
-            friends.append(i.id)
-    except:
-        print uid + "more than one or does not exit"
-    return friends
+    myFriendsObj= ['aa','bb','cc','dd']
+    return myFriendsObj
 
 #获得某个人的所有评论过的商店的所有评论
 def getUserComments(uid):
@@ -123,6 +57,24 @@ def getUserComments(uid):
     comment2 = ["bad","very bad","so bad"]
     store2 = {"name":"store2","place":"shang hai","comment":comment2}
     talk = [store1,store2]
+    return talk
+    
+#获取热门商店,以及评论
+def getHostStore():
+    comment1 = ["good","very good","not bad"]
+    store1 = {"name":"store1","place":"guang zhou","comment":comment1}
+    
+    comment2 = ["bad","very bad","so bad"]
+    store2 = {"name":"store2","place":"shang hai","comment":comment2}
+    talk = [store1,store2]
+    return talk
+
+#获得某一个商店的所有评论信息,store 为商店名,最后返回一个只有一个元素的数组,方便函数重用
+def getTheStoreMessage(store):
+    comment1 = ["good","very good","not bad"]
+    theStore = {"name":store,"place":"guang zhou","comment":comment1}
+    
+    talk = [theStore]
     return talk
     
 #删除用户uid的好友friend
@@ -161,11 +113,14 @@ def index(request):
         is_ok = True
         
     if is_ok == False:
-        return render_to_response('mytalk/index.html',{'uid':uid,"showError":"用户名或密码有误,若未注册，请先注册"})
+        return render_to_response('index.html',{'uid':uid,"showError":"用户名或密码有误,若未注册，请先注册"})
     '''
+    hostStore = getHostStore()
     if request.session.get('uid') != None:
         uid = request.session.get('uid')
-    return render_to_response('mytalk/index.html',{'uid':uid})
+        friendsList = getFriendsList(uid)
+        return render_to_response('mytalk/index.html',{'uid':uid,'friendsList':friendsList,'hostStore':hostStore})
+    return render_to_response('mytalk/index.html',{'uid':uid,'hostStore':hostStore})
 
 '''退出操作'''
 def exitOperation(request):
@@ -282,4 +237,10 @@ def doRegister(request):
             return HttpResponse("用户名已存在")
     else:
         return HttpResponse("false")
-        
+
+'''获得某一个商店的所有评论信息'''
+def getStoreMessage(request):
+    store = request.POST.get("store")
+    talk = getTheStoreMessage(store)
+    return render_to_response('mytalk/showUserComments.html',{'talk':talk})
+
