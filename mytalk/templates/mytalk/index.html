@@ -28,7 +28,7 @@
 	</head>
     
 	<body>
-        {% include 'header.html'%}
+        {% include 'mytalk/header.html'%}
         <!-- 固定布局 -->
 		<div class="container-fluid">
 			<div class="row-fluid">
@@ -46,7 +46,7 @@
 
                     {% ifnotequal uid "" %}
 					<div class="well sidebar-nav">
-						{% include "friendsList.html" %}
+						{% include "mytalk/friendsList.html" %}
 					</div>
                     {% endifnotequal %}
                     
@@ -63,7 +63,7 @@
 					<div id="showComments"><!--显示商店和评论--></div>
 				</div>
 			</div>
-        {% include "footer.html" %}
+        {% include "mytalk/footer.html" %}
 		</div>
 	</body>
 </html>
