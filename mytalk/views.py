@@ -48,7 +48,7 @@ def getUserMessage(uid):
 def getFriendsList(uid):
     myFriendsObj= ['aa','bb','cc','dd']
     return myFriendsObj
-    
+
 #获得某个人的所有评论过的商店的所有评论
 def getUserComments(uid):
     comment1 = ["good","very good","not bad"]
@@ -119,8 +119,8 @@ def index(request):
     if request.session.get('uid') != None:
         uid = request.session.get('uid')
         friendsList = getFriendsList(uid)
-        return render_to_response('index.html',{'uid':uid,'friendsList':friendsList,'hostStore':hostStore})
-    return render_to_response('index.html',{'uid':uid,'hostStore':hostStore})
+        return render_to_response('mytalk/index.html',{'uid':uid,'friendsList':friendsList,'hostStore':hostStore})
+    return render_to_response('mytalk/index.html',{'uid':uid,'hostStore':hostStore})
 
 '''退出操作'''
 def exitOperation(request):
@@ -131,7 +131,7 @@ def exitOperation(request):
 
 '''用户登录'''
 def signIn(request):
-    return render_to_response("signIn.html")
+    return render_to_response("mytalk/signIn.html")
 
 '''验证用户登录'''
 def detectLogin(request):
@@ -149,18 +149,18 @@ def detectLogin(request):
 def friends(request):
     uid = ''
     if request.session.get('uid') == None:
-        return render_to_response('index.html',{'uid':uid})
+        return render_to_response('mytalk/index.html',{'uid':uid})
 
     uid = request.session.get('uid')
     myFriendsObj = getFriendsList(uid)
     
-    return render_to_response('friends.html',{'uid':uid,'friendsList':myFriendsObj})
+    return render_to_response('mytalk/friends.html',{'uid':uid,'friendsList':myFriendsObj})
     
 '''更改用户信息'''
 def exchangeUserMessage(request):
     uid = ''
     if request.session.get('uid') == None:
-        return render_to_response('index.html',{'uid':uid})
+        return render_to_response('mytalk/index.html',{'uid':uid})
     
     uid = request.session.get('uid')
     userMessage = getUserMessage(uid)
@@ -193,22 +193,22 @@ def exchangeUserMessage(request):
             password = hashPassword(password)
             update_user_password(uid,password)
             message['isPassword'] = "密码修改成功"
-        return render_to_response('exchangeUserMessage.html',{'uid':uid,'message':message})
+        return render_to_response('mytalk/exchangeUserMessage.html',{'uid':uid,'message':message})
         
     userMessage = getUserMessage(uid)    
-    return render_to_response('exchangeUserMessage.html',{'uid':uid,'message':userMessage})
+    return render_to_response('mytalk/exchangeUserMessage.html',{'uid':uid,'message':userMessage})
     
 '''显示评论信息，如果为自己的话，将显示自己所有的评论；如果是好友的话，显示好友可见的评论'''
 def message(request):
     uid = ''
     if request.session.get('uid') == None or request.POST.get('username') == None:
-        return render_to_response('index.html',{'uid':uid})
+        return render_to_response('mytalk/index.html',{'uid':uid})
         
     uid = request.session.get('uid')
     friend = request.POST.get('username')
     
     talk = getUserComments(uid)
-    return render_to_response('showUserComments.html',{'uid':uid,'friend':friend,'talk':talk})
+    return render_to_response('mytalk/message.html',{'uid':uid,'friend':friend,'talk':talk})
     
 '''删除用户uid的某个好友,返回的结果为一个true 或者是 false，true代表删除成功'''
 def deleteFriend(request):
@@ -220,7 +220,7 @@ def deleteFriend(request):
         
 '''用户注册'''
 def register(request):
-    return render_to_response("register.html",{'uid':''})
+    return render_to_response("mytalk/register.html",{'uid':''})
     
 '''完成注册过程'''
 def doRegister(request):
@@ -242,4 +242,5 @@ def doRegister(request):
 def getStoreMessage(request):
     store = request.POST.get("store")
     talk = getTheStoreMessage(store)
-    return render_to_response('showUserComments.html',{'talk':talk})
+    return render_to_response('mytalk/showUserComments.html',{'talk':talk})
+

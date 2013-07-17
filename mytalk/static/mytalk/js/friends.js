@@ -22,6 +22,7 @@ function showMessage(event){
     if (nowFriend == myself)
         $("#myself").css("background-color","");
     friend = event.id;
+
     $("#"+friend).css("background-color","yellow");
     
     if (friend == myself)

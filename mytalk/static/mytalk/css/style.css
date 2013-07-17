@@ -27,6 +27,7 @@
 #showFriendsList {
     float:left;
     width:10%;
+    margin:10px;
     border:1px solid green;
     overflow:hidden;   
 }
