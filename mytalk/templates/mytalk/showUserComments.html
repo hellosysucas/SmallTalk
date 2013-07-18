@@ -17,12 +17,12 @@
 						<a class="btn" href="#" id="{{ eachStore.name}}_{{ forloop.counter }}_a">View details &raquo;</a>
 					</p>
 				</div>
-			</div>
+			</div>	
 		{% else %}
 			<div class="row-fluid" >
 				<div class="span6">
 					<h2>{{ eachStore.name }}</h2>
-					<p class="{{ eachStore.name}}_{{ for loop.counter }}" style="display:none">
+					<p class="{{ eachStore.name}}_{{ forloop.counter }}" style="display:none">
 						{{ eachComment }}
 					</p>
 			
