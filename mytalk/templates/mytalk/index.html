@@ -39,7 +39,9 @@
 							<h3>热门点评商户</h3>
 							{% for each in hostStore %}
                                 <li>
-                                    <a id="{{ each.name }}" onclick="showStoreMessage(this)"> {{ each.name }}</a>
+                                    <a id="{{ each.name }}" 
+                                    	onclick="showStoreMessage(this)"> {{ each.name }}
+                                    </a>
                                 </li>
                             {% endfor %}
 						</ul>
@@ -62,15 +64,26 @@
 								<textarea class="span12" rows="5"> </textarea>	
 								<!-- 选择点评商户	-->
 					            <div class="span3">
-									<a href="#myModal" role="button" class="btn btn-primary" data-toggle="modal">选择点评商户</a>
+									<a href="#myModal" role="button" 
+									class="btn btn-primary" data-toggle="modal">
+										选择点评商户
+										</a>
  
 									<!-- Modal -->
-									<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" 
+										aria-labelledby="myModalLabel" aria-hidden="true">
 										<div class="modal-header">
-											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+											<button type="button" class="close" data-dismiss="modal" 
+												aria-hidden="true">
 												×
 											</button>
-											<h3 id="myModalLabel">商户列表</h3>
+											<div class="row-fluid">
+												<span id="myModalLabel">商户列表</span>
+												<input type="text" class="input-medium search-query offset2" 
+													placeholder="输入商户名称">
+												<button type="submit" class="btn">搜索</button>
+												<button type="submit" class="btn">添加商户</button>
+											</div>
 										</div>
 										<div class="modal-body">
 											<ul class="nav nav-list">
@@ -92,9 +105,7 @@
 											<button class="btn" data-dismiss="modal" aria-hidden="true">
 												关闭
 											</button>
-											<button class="btn btn-primary">
-												确定
-											</button>
+											<button class="btn btn-primary">确定</button>
 										</div>
 									</div>
 								</div>
@@ -102,11 +113,12 @@
 								<div class="span3 pull-right">
 									<!-- 点评可见性 -->
 									<div class="span6 dropdown">
-										<a class="dropdown-toggle" data-toggle="dropdown" href="#"> 公共 <b class="caret"> </b> </a>
+										<a class="dropdown-toggle" data-toggle="dropdown" href="#"> 
+											公共
+											<b class="caret"> </b> 
+										</a>
 										<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-											<li>
-												<a href="#">好友圈</a>
-											</li>
+											<li><a href="#">好友圈</a></li>
 										</ul>
 									</div>
 		
