@@ -19,8 +19,9 @@
 http://my.oschina.net/zimingforever/blog/68621
 2. 简而言之，git pull会自动帮你merge，而git fetch需要自己merge，所以大家都使用git fetch来更新项目，这样才能知道别人改了什么。具体命令：
 > git fetch origin master:tmp  
->     git diff tmp   
->     git merge tmp
+> git diff tmp   
+> git merge tmp
+
 
 意思是从远程获取最新的版本到本地的test分支上之后再进行比较合并
 
