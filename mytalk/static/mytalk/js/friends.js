@@ -4,7 +4,7 @@ var oldStore = "";
 $(function(){
     if ($("#myself").html()){
         myself = nowFriend = $("#myself").html();
-        $("#myself").css("background-color","yellow");
+        $("#myself").css("background-color","#eeeeee");
         getUserCommentMessage(myself);
     }
 })
@@ -23,10 +23,10 @@ function showMessage(event){
         $("#myself").css("background-color","");
     friend = event.id;
 
-    $("#"+friend).css("background-color","yellow");
+    $("#"+friend).css("background-color","#eeeeee");
     
     if (friend == myself)
-        $("#myself").css("background-color","yellow");
+        $("#myself").css("background-color","#eeeeee");
     nowFriend = friend;
     
     getUserCommentMessage(friend);
@@ -43,7 +43,7 @@ function deleteFriend(){
 function showStoreMessage(event){
     id = event.id;
     
-    $("#"+id).css("background-color","yellow");
+    $("#"+id).css("background-color","#eeeeee");
     $("#"+nowFriend).css("background-color","");
     if (nowFriend == myself)
         $("#myself").css("background-color","");

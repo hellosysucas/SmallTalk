@@ -1,21 +1,21 @@
 <!--显示某一个用户的，对他所评论的 所有商店 的 评论内容-->
 {% for eachStore in talk %}
 <div class="row-fluid" >
-{% for eachComment in eachStore.comment %}
-    <div class="span6">
-        <h2>{{ eachStore.name }}</h2>
-        <p class="{{ eachStore.name}}_{{ forloop.counter }}" style="display:none">
-            {{ eachComment }}
-        </p>
-        
-        <p class="{{ p_forloop.counter }}_{{ eachStore.name}}">
-{{ eachComment.0 }}{{ eachComment.1 }}{{ eachComment.2 }}{{ eachComment.3 }}{{ eachComment.4 }}{{ eachComment.5 }}{{ eachComment.6 }}{{ eachComment.7 }}{{ eachComment.8 }}{{ eachComment.9 }}{{ eachComment.10 }}{{ eachComment.11 }}{{ eachComment.12 }}{{ eachComment.13 }}{{ eachComment.14 }}{{ eachComment.15 }}{{ eachComment.16 }}{{ eachComment.17 }}{{ eachComment.18 }}{{ eachComment.19 }}...
-        </p>
-        
-        <p>
-            <a class="btn" href="#" id="{{ eachStore.name}}_{{ forloop.counter }}_a">View details &raquo;</a>
-        </p>
-    </div>
-{% endfor %}
+	{% for eachComment in eachStore.comment %}
+	<div class="span6">
+		<h2>{{ eachStore.name }}</h2>
+		<p class="{{ eachStore.name}}_{{ forloop.counter }}" style="display:none">
+			{{ eachComment }}
+		</p>
+
+		<p class="{{ p_forloop.counter }}_{{ eachStore.name}}">
+			{{ eachComment.0 }}{{ eachComment.1 }}{{ eachComment.2 }}{{ eachComment.3 }}{{ eachComment.4 }}{{ eachComment.5 }}{{ eachComment.6 }}{{ eachComment.7 }}{{ eachComment.8 }}{{ eachComment.9 }}{{ eachComment.10 }}{{ eachComment.11 }}{{ eachComment.12 }}{{ eachComment.13 }}{{ eachComment.14 }}{{ eachComment.15 }}{{ eachComment.16 }}{{ eachComment.17 }}{{ eachComment.18 }}{{ eachComment.19 }}...
+		</p>
+
+		<p>
+			<a class="btn" href="#" id="{{ eachStore.name}}_{{ forloop.counter }}_a">View details &raquo;</a>
+		</p>
+	</div>
+	{% endfor %}
 </div>
 {% endfor %}

@@ -51,27 +51,27 @@ def getFriendsList(uid):
 
 #获得某个人的所有评论过的商店的所有评论
 def getUserComments(uid):
-    comment1 = ["good","very good","not bad"]
+    comment1 = ["good","very good","not bad","4"]
     store1 = {"name":"store1","place":"guang zhou","comment":comment1}
     
-    comment2 = ["bad","very bad","so bad"]
+    comment2 = ["bad","very bad","so bad","4"]
     store2 = {"name":"store2","place":"shang hai","comment":comment2}
     talk = [store1,store2]
     return talk
     
 #获取热门商店,以及评论
 def getHostStore():
-    comment1 = ["good","very good","not bad"]
+    comment1 = ["good","very good","not bad","4"]
     store1 = {"name":"store1","place":"guang zhou","comment":comment1}
     
-    comment2 = ["bad","very bad","so bad"]
+    comment2 = ["bad","very bad","so bad","4"]
     store2 = {"name":"store2","place":"shang hai","comment":comment2}
     talk = [store1,store2]
     return talk
 
 #获得某一个商店的所有评论信息,store 为商店名,最后返回一个只有一个元素的数组,方便函数重用
 def getTheStoreMessage(store):
-    comment1 = ["good","very good","not bad"]
+    comment1 = ["good","very good","not bad","4"]
     theStore = {"name":store,"place":"guang zhou","comment":comment1}
     
     talk = [theStore]
