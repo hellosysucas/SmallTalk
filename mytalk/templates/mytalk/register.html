@@ -50,10 +50,15 @@
     <body>	
         {% include "mytalk/header.html" %}
         <div class="container ">
-	        <div class="form-signin">
+	        <div class="form-signin setWidth">
 	        	{% include "mytalk/inputUserMessage.html" %}
+	        	
 				<span id="showError"> </span>
-		        <p><button onclick="check_register()">注册</button></p>
+				<div class="form-horizontal">
+					<div class="control-group">
+			        	<p class="controls"><button onclick="check_register()">注册</button></p>
+			        </div>
+			    </div>
 	        </div>
         </div>
     </body>
