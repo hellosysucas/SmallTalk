@@ -244,3 +244,5 @@ def getStoreMessage(request):
     talk = getTheStoreMessage(store)
     return render_to_response('mytalk/showUserComments.html',{'talk':talk})
 
+def doSearch(request):
+    return render_to_response('mytalk/search.html')

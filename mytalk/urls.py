@@ -28,4 +28,5 @@ urlpatterns = patterns('',
     url(r'^friends/deleteFriend/$',views.deleteFriend),
 	
     url(r'^exchangeUserMessage/$',views.exchangeUserMessage),
+    url(r'^search/$',views.doSearch),
 )
