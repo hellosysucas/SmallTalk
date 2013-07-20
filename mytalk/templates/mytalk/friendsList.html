@@ -1,0 +1,12 @@
+<!-- 好友列表页面，显示某个用户的所有好友,被用在include中 -->
+<ul class="nav nav-list">
+	<h3>好友圈</h3>
+	<li>
+		<a id="myself" onclick="showMessage(this)" >{{ uid }}</a>
+	</li>
+    {% for each in friendsList%}
+        <li>
+            <a id="{{ each }}" onclick="showMessage(this)">{{ each }}</a>
+        </li>
+    {% endfor %}
+</ul>

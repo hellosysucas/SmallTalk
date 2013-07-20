@@ -1,0 +1,64 @@
+<!--登录页面-->
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>登录 &middot; 小众点评</title>
+		
+		<link href="{% static 'mytalk/css/bootstrap.css' %}" rel="stylesheet"/>
+		<link href="{% static 'mytalk/css/bootstrap-responsive.css' %}" rel="stylesheet"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'mytalk/css/style.css' %}" />
+        <script src="{% static 'mytalk/js/jquery.js' %}" type="text/javascript"></script>    
+        <script src="{% static 'mytalk/js/sha1.js' %}" type="text/javascript"></script>
+        <script src="{% static 'mytalk/js/check_input.js' %}" type="text/javascript"></script>
+        
+    	<style type="text/css">
+			body {
+				padding-top: 40px;
+				padding-bottom: 40px;
+				background-color: #f5f5f5;
+			}
+
+			.form-signin {
+				max-width: 300px;
+				padding: 19px 29px 29px;
+				margin: 0 auto 20px;
+				background-color: #fff;
+				border: 1px solid #e5e5e5;
+				-webkit-border-radius: 5px;
+				-moz-border-radius: 5px;
+				border-radius: 5px;
+				-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+				-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+				box-shadow: 0 1px 2px rgba(0,0,0,.05);
+			}
+      	</style>
+	</head>
+	
+	<body>
+		<div class="container">
+            <div class="form-signin">
+	            <h2 class="form-signin-heading">Please sign in</h2>
+	        	<label>username:
+	            <input type="text" class="input-block-level" maxlength="20" placeholder="输入英文字符，数字，或中文"
+	        		id="username" name="username" value="" onkeyup="check_uname(this.value,'wrongChar')"/>
+	            <span id="wrongChar"></span>
+	            </label>
+	            
+	            <label>password:
+	            <input type="password" class="input-block-level" placeholder="Password"
+	        		id="password" name="password" value="" maxlength="20" onkeyup="check_login_password(this.value,'wrongPassword')"/>
+	        	<span id="wrongPassword"></span>
+	            </label>
+	            
+	            <span id="showError">{{ showError }}</span>
+	            
+	            <button class="btn btn-large btn-primary"
+	        		onclick="check_login()">
+	        		Sign in
+	        	</button>
+            </div>
+		</div>
+	</body>
+</html>
