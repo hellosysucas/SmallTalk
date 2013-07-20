@@ -11,7 +11,7 @@ $(function(){
         getUserCommentMessage(myself,0);
     }
     else{
-        $.post("../getStoreMessage/",{'store':oldStore,'page':0},function(data){
+        $.post("../getStoreMessage/",{'store':oldStore,'page':'0'},function(data){
             $("#showComments").html(data);
         });
     }
