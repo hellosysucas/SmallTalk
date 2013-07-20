@@ -13,6 +13,10 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
     #url(r'^site_media/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.STATIC_PATH}),
+    
+    #initial and test database
+    url(r'^test/$', views.test),  
+    
     url(r'^$',views.index,name='index'),
     url(r'^signIn/$',views.signIn),
     
@@ -22,16 +26,18 @@ urlpatterns = patterns('',
     
     url(r'^getStoreList/$',views.getStoreList),
     url(r'^is_store_exist/$',views.isStoreExist),
-	url(r'^insert_new_store/$',views.insertNewStore),
+    url(r'^insert_new_store/$',views.insertNewStore),
     url(r'^insert_new_comment/$',views.insertNewComment),
     
     url(r'^register/$',views.register),
-	url(r'^register/doRegister/$',views.doRegister),
-	
+    url(r'^register/doRegister/$',views.doRegister),
+    
     url(r'^friends/$',views.friends),
     url(r'^friends/message/$',views.message),
     url(r'^friends/deleteFriend/$',views.deleteFriend),
-	
+    
     url(r'^exchangeUserMessage/$',views.exchangeUserMessage),
+    
     url(r'^search/$',views.doSearch),
+    
 )

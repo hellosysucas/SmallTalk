@@ -7,113 +7,309 @@ from django.shortcuts import render_to_response
 from django.core.context_processors import csrf
 import hashlib
 import datetime, re
+import time
 from django import forms
 from django.http import HttpResponseRedirect
 from mytalk.models import User,Store,Label,Comment,Reply,LabelInline,StoreAdmin
 
+# initia and test database
+def test(request):
+    insert_new_store("test", "here")
+    insert_new_store("test2", "there")
+    insert_new_store("test3", "there")
+    
+    '''
+    insert_new_comment("false", "test", "lc", False)
+    insert_new_comment("true", "test", "lc", True)
+    insert_new_comment("true2", "test2", "lc", True)
+    insert_new_comment("true3", "test2", "mt", True)
+    insert_new_comment("true4", "test2", "zp", True)
+    '''
+    
+    return HttpResponse(getHostStore())
+    #return HttpResponse(getCommonComments())
+
 #判断用户名是否格式合法
 def is_uid_name_valid(uid):
-    return True
+    pattern = re.compile(r'[A-Za-z](\w|_| )*')
+    
+    if pattern.match(uid) and len(uid) <= 20:
+        return True
+    return False    
     
 #判断邮箱格式是否合法
 def is_email_name_valid(email):
-    return True
+    pattern = re.compile(r'\w*@(\w)+.(com|cn|org)')
+    
+    if pattern.match(email):
+        return True
+    return False
+
+#判断密码是否合法
+def is_password_valid(password):
+    pattern = re.compile(r'\w+')
+    
+    if pattern.match(password):
+        return True
+    return False
 
 #更新用户id为新的newid,true代表成功,需要验证用户名id的格式是否合法
 def update_user_id(uid,newUid):
-    return True
+    try:
+        user = User.objects.get(id = uid)
+        
+        if is_uid_exist(newUid) == False and is_uid_name_valid(newUid):
+            user.id = newUid
+            user.save()
+            print "save id"
+            User.objects.filter(id = uid).delete()
+            return True
+    except:
+        print "more than one or does not exit"
+        
+    return False
 
 #更新用户uid的邮箱为email,需要验证email的格式是否合法
 def update_user_email(uid,email):
-    return True
+    try:
+        user = User.objects.get(id = uid)
+        if is_email_name_valid(email):
+            user.email = email
+            user.save()
+            print "save email"
+            return True
+    except:
+        print uid + "more than one or does not exit"
+    
+    return False
 
 #更新用户uid的密码为新的密码password
 def update_user_password(uid,password):
-    return True
+    try:
+        user = User.objects.get(id = uid)
+        if is_password_valid(password):
+            user.password = password
+            user.save()
+            print "save password"
+            return True
+    except:
+        print uid + "more than one or does not exit"
+    return False
 
 #判断某个用户名是否已经存在
 def is_uid_exist(uid):
-    return False
+    try:
+        user = User.objects.get(id = uid)
+        return True
+    except:
+        return False
 
 #判断用户是否合法,需要先验证uid和upassword是否为空等格式是否正确
 def is_user_valid(uid,upassword):
-    return True
+    if is_uid_name_valid(uid) and is_password_valid(upassword) and is_uid_exist(uid):
+        user = User.objects.get(id = uid)
+        if user.password == upassword:
+            return True
+    return False
 
 #判断某一个商店是否存在，传递过来的是商店名字符串
 def is_store_exist(store_name):
-	return True
-	
+    try:
+        store = Store.objects.get(name = store_name)
+        return True
+    except:
+        return False
+    
 #获得用户信息,包括用户邮箱Email
 def getUserMessage(uid):
-    message = {'uid':uid,'email':'123@qq.com'}
-    return message
+    try:
+        user = User.objects.get(id = uid)
+        return {'uid':user.id, 'email':user.email}
+    except:
+        return {'uid':uid, 'email':''}
 
 #获得用户uid的好友列表
 def getFriendsList(uid):
-    myFriendsObj= ['aa','bb','cc','dd']
-    return myFriendsObj
+    friends = []
+    try:
+        user = User.objects.get(id = uid)
+        friendsList = user.friends.all()
+        
+        print friendsList
+        for i in friendsList:
+            if i.id != uid:
+                friends.append(i.id)
+    except:
+        print uid + "more than one or does not exit"
+    return friends
 
 #获得某个人的所有评论过的商店的所有评论
 def getUserComments(uid):
-    comment1 = ["good","very good","not bad","4"]
-    store1 = {"name":"store1","place":"guang zhou","comment":comment1}
+    talk = []
+    store_name = []
     
-    comment2 = ["bad","very bad","so bad","4"]
-    store2 = {"name":"store2","place":"shang hai","comment":comment2}
-    talk = [store1,store2]
+    try:
+        user = User.objects.get(id = uid)
+        comment = user.comment_set.all()
+        
+        for item in comment:
+            if store_name.count( item.store.name ) == 0:
+                comment_tmp = [item.content]
+                store = {"name": item.store.name, "place": item.store.place, "comment": comment_tmp}
+                talk.append(store)
+                store_name.append(item.store.name)
+            else:
+                index = store_name.index(item.store.name )
+                talk[index]["comment"].append(item.content)
+                
+        return talk
+    except:
+        print "errors occurs in getUserComments"
+    
     return talk
     
 #获得公开的所有商店的所有评论,注意，是公开显示的评论
 def getCommonComments():
-    comment1 = ["good","very good","not bad","4"]
-    store1 = {"name":"store1","place":"guang zhou","comment":comment1}
+    talk = []
+    store_name = []
+
+    try:
+        comment = Comment.objects.filter(visible = True)
+        
+        for item in comment:
+            if store_name.count( item.store.name ) == 0:
+                comment_tmp = [item.content]
+                store = {"name": item.store.name, "place": item.store.place, "comment": comment_tmp}
+                talk.append(store)
+                store_name.append(item.store.name)
+            else:
+                index = store_name.index(item.store.name )
+                talk[index]["comment"].append(item.content)
+                
+        return talk
+    except:
+        print "errors occurs in getCommonComments"
     
-    comment2 = ["bad","very bad","so bad","4"]
-    store2 = {"name":"store2","place":"shang hai","comment":comment2}
-    
-    comment3 = ["bad3","very bad3","so bad3","4"]
-    store3 = {"name":"store3","place":"shang hai","comment":comment3}
-    talk = [store1,store2,store3]
     return talk    
 
 #插入一条新的评论，comment为评论内容，store_name为商店名，uid为用户，visibility为一个int类型的值，1代表公共可见，0代表好友可见
 def insert_new_comment(comment,store_name,uid,visibility):
-    return True
-
+    try:
+        user = User.objects.get(id = uid)
+        store = Store.objects.get(name = store_name)
+        comment = Comment(  author = user,
+                            store = store,
+                            pub_time = time.time(),
+                            content = comment,
+                            visible = visibility
+                          )
+        comment.save() 
+        return True
+    except:
+        print "errors occurs in getCommonComments"
+        return False
+    
 #获取热门商店,以及评论
 def getHostStore():
-    comment1 = ["good","very good","not bad","4"]
-    store1 = {"name":"store1","place":"guang zhou","comment":comment1}
+    talk = []
+    stores = Store.objects.all()
+    count = []
     
-    comment2 = ["bad","very bad","so bad","4"]
-    store2 = {"name":"store2","place":"shang hai","comment":comment2}
-    talk = [store1,store2]
+    for store_item in stores:
+        count.append( { "store": store_item.name, "num": len( store_item.comment_set.all() )} )
+       
+    count.sort(key=lambda count: count["num"], reverse = True)
+    
+    i = 0
+    while i <= 5 and i < len(count):
+        store = Store.objects.get(name = count[i]["store"])
+        comms = store.comment_set.all().filter(visible = True)
+        comment1 = []
+        
+        for comment_item in comms:
+            comment1.append(comment_item.content)
+            
+        tmp = {"name": store.name, "place": store.place, "comment": comment1}
+        talk.append(tmp)
+        i+=1
+        
     return talk
 
 #获得第page+1个四个商店名，例如第零页的四个商店名，第二页的四个商店名
 def getPageStoreList(page):
-    storeList = ["store1","store2","store3","store4"]
+    
+    stores = Store.objects.order_by("name")
+    page = page * 4
+    storePage = stores[page : page+4]
+    
+    storeList = []
+    for item in storePage:
+        storeList.append(item.name)
+    
     return storeList
     
 #获得某一个商店的所有评论信息,store 为商店名,最后返回一个只有一个元素的数组,方便函数重用,如果没有这个商店，返回一个空数组
 def getTheStoreMessage(store):
-    comment1 = ["good","very good","not bad","4"]
-    theStore = {"name":store,"place":"guang zhou","comment":comment1}
+    talk = []
     
-    talk = [theStore]
+    try:
+        item = Store.objects.get(name = store)    #store name ?
+               
+        comments = item.comment_set.all()
+        comment_tmp = []
+     
+        for comment_item in comments:
+            comment_tmp.append(comment_item.content)
+        
+        store_tmp = {"name": item.name, "place": item.place, "comment": comment_tmp}
+            
+        talk.append(store_tmp)
+    except:
+        print "errors occurs in getTheStoreMessage"
+    
     return talk
     
 #插入新的商店，插入成功返回true
 def insert_new_store(store_name,store_place):
-    return True
+    
+    try:
+        if is_store_exist(store_name) == False:
+            store = Store(name = store_name,
+                          place = store_place,
+                          checked = True
+                          )
+            store.save()
+            return True
+    except:
+        print "errors occurs in insert_new_store"
+    return False
     
 #删除用户uid的好友friend
 def deleteUserFriend(uid,friend):
-    return True
+    try:
+        user = User.objects.get(id = uid)
+        friend = User.objects.get(id = friend)
+        user.friends.remove(friend)
+        
+        return True 
+    except:
+        print "errors occurs in deleteUserFriend"
+    
+    return False
     
 #插入新的用户到数据库中，密码已经是加密后的
 def insert_new_user(email,uid,password):
-    return True
+    try:
+        if is_uid_exist(uid) == False:
+            new_user = User(id = uid,
+                            email = email,
+                            password = password
+                            )
+            new_user.save()
+            return True
+    except:
+        print "errors occurs in insert_new_user"
+    return False
 
 '''数据加密'''
 def hashPassword(password):
@@ -277,14 +473,12 @@ def getStoreMessage(request):
         talk = getCommonComments()
     return render_to_response('mytalk/showUserComments.html',{'talk':talk})
 
-def doSearch(request):
-    return render_to_response('mytalk/search.html')
 '''获得第几页的商店列表'''
 def getStoreList(request):
     page = int(request.POST.get("page"))
     storeList = getPageStoreList(page)
     return render_to_response('mytalk/showStoreList.html',{'storeList':storeList})
-	
+    
 '''商店是否存在，存在返回网页'''
 def isStoreExist(request):
     store_name = request.POST.get('store')
@@ -319,4 +513,8 @@ def insertNewComment(request):
         return render_to_response('mytalk/showUserComments.html',{'talk':talk})
     else:
         return HttpResponse("")
+    
+def doSearch(request):
+    return render_to_response('mytalk/search.html')
+
     
