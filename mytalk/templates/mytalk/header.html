@@ -17,31 +17,19 @@
 			<div class="nav-collapse collapse">
 				<!-- .nav, .navbar-search, .navbar-form, etc -->
 				<ul class="nav">
-					<li class="active"><a href="../">首页</a></li>
-					<!-- <li><a href="../">关于</a></li>
-					<li><a href="../">联系</a></li>
-					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#" >
-							其他 
-							<b class="caret"> </b>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="../">操作1</a></li>
-							<li><a href="../">操作2</a></li>
-							<li><a href="../">操作3</a></li>
-						</ul>
-					</li> -->
+					<li class="active"><a href="../"><i class="icon-home icon-white"> </i>首页</a></li>
 				</ul>
                 <div class="form-search navbar-form form-inline">
-                	<div class="span3 offset2">
-						<input type="text" class="input-medium search-query">
+                	<div class="span3 offset2 input-append">
+						<input type="text" class="input-medium search-query" placeholder="搜索商户或用户">
 						<a  type="submit" class="btn" href="../search">
-							搜索
+							<i class="icon-search"> </i>
 						</a>
 					</div>
 					<div class="pull-right">
 						{% ifnotequal uid "" %}
-						<strong><a class="navbar-link" href="../exchangeUserMessage">{{uid}}</a></strong>
+						<strong><a class="navbar-link" href="../exchangeUserMessage">
+							<i class="icon-user icon-white"> </i>{{uid}}</a></strong>
 						<a class="btn" href="../friends">好友管理</a>
 						{% else %}
 						<a class="btn" href="../signIn">登录</a>

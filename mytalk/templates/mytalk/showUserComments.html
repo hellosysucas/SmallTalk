@@ -14,7 +14,18 @@
 					</p>
 			
 					<p>
-						<a class="btn" href="#" id="{{ eachStore.name}}_{{ forloop.counter }}_a">View details &raquo;</a>
+						<a class="btn" href="#detailsModal" role="button" data-toggle="modal"
+							id="{{ eachStore.name}}_{{ forloop.counter }}_a">更多 &raquo;</a>
+						<!-- Modal -->
+						<div id="detailsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	
+						  <div class="modal-body">
+						    <p>点评全部内容</p>
+						  </div>
+						  <div class="modal-footer">
+						    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+						  </div>
+						</div>
 					</p>
 				</div>
 			</div>	
@@ -31,7 +42,18 @@
 					</p>
 			
 					<p>
-						<a class="btn" href="#" id="{{ eachStore.name}}_{{ forloop.counter }}_a">View details &raquo;</a>
+						<a class="btn" href="#detailsModal" role="button" data-toggle="modal"
+							id="{{ eachStore.name}}_{{ forloop.counter }}_a">更多 &raquo;</a>
+						<!-- Modal -->
+						<div id="detailsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	
+						  <div class="modal-body">
+						    <p>点评全部内容</p>
+						  </div>
+						  <div class="modal-footer">
+						    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+						  </div>
+						</div>
 					</p>
 				</div>
 		{% endif %}
