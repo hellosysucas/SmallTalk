@@ -18,9 +18,9 @@
 				<!-- .nav, .navbar-search, .navbar-form, etc -->
 				<ul class="nav">
 					<li class="active"><a href="../">首页</a></li>
-					<li><a href="../">关于</a></li>
+					<!-- <li><a href="../">关于</a></li>
 					<li><a href="../">联系</a></li>
-					<li class="dropdown"><!-- 下拉菜单 -->
+					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#" >
 							其他 
 							<b class="caret"> </b>
@@ -30,14 +30,14 @@
 							<li><a href="../">操作2</a></li>
 							<li><a href="../">操作3</a></li>
 						</ul>
-					</li>
+					</li> -->
 				</ul>
                 <div class="form-search navbar-form form-inline">
                 	<div class="span3 offset2">
 						<input type="text" class="input-medium search-query">
-						<button type="submit" class="btn">
+						<a  type="submit" class="btn" href="../search">
 							搜索
-						</button>
+						</a>
 					</div>
 					<div class="pull-right">
 						{% ifnotequal uid "" %}
@@ -47,7 +47,7 @@
 						<a class="btn" href="../signIn">登录</a>
 						<a class="btn" href="../register/">注册</a>
 						{% endifnotequal %}
-						<a class="btn" onclick="operation_exit()" href="#">退出</a>
+						<a class="btn" onclick="operation_exit()" href="">退出</a>
 					</div>
 				</div>
             </div>

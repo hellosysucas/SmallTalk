@@ -277,6 +277,8 @@ def getStoreMessage(request):
         talk = getCommonComments()
     return render_to_response('mytalk/showUserComments.html',{'talk':talk})
 
+def doSearch(request):
+    return render_to_response('mytalk/search.html')
 '''获得第几页的商店列表'''
 def getStoreList(request):
     page = int(request.POST.get("page"))
