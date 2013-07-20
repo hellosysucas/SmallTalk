@@ -2,15 +2,16 @@ var nowFriend = "";
 var myself = "";
 var oldStore = "";
 var selectedStore = "";
+//var dir_comment = {'storeName':'','userName':'','page':0};
 $(function(){
     $("#modal-header").css("display","none");
     if ($("#myself").html()){
         myself = nowFriend = $("#myself").html();
         $("#myself").css("background-color","#eeeeee");
-        getUserCommentMessage(myself);
+        getUserCommentMessage(myself,0);
     }
     else{
-        $.post("../getStoreMessage/",{'store':oldStore},function(data){
+        $.post("../getStoreMessage/",{'store':oldStore,'page':'0'},function(data){
             $("#showComments").html(data);
         });
     }
@@ -19,16 +20,21 @@ $(function(){
     $('#wrongPlace').css('color','red');
 })
 
-function getUserCommentMessage(uid){
-    $.post("../friends/message/",{'username':uid},function(data){
+function getUserCommentMessage(uid,page){
+    $.post("../friends/message/",{'username':uid,'page':page},function(data){
 		$("#showComments").html(data);
 	});
 }
 
 function showMessage(event){
     //$("#showUserMessage").html(friend);
-    $("#"+oldStore).css("background-color","");
-    $("#"+nowFriend).css("background-color","");
+    if (oldStore.length > 0){
+        $("#"+oldStore).css("background-color","");
+        oldStore = '';
+    }
+    if (nowFriend.length > 0){
+        $("#"+nowFriend).css("background-color","");
+    }
     if (nowFriend == myself)
         $("#myself").css("background-color","");
     friend = event.id;
@@ -39,10 +45,11 @@ function showMessage(event){
         $("#myself").css("background-color","#eeeeee");
     nowFriend = friend;
     
-    getUserCommentMessage(friend);
+    getUserCommentMessage(friend,0);
 }
 
-function deleteFriend(){
+function deleteFriend(event){
+    nowFriend = event.id;
     $.post("../friends/deleteFriend",{'username':nowFriend},function(data){
         if ( !data )
             window.open("../","_self");
@@ -54,14 +61,17 @@ function showStoreMessage(event){
     id = event.id;
     
     $("#"+id).css("background-color","#eeeeee");
-    $("#"+nowFriend).css("background-color","");
     if (nowFriend == myself)
         $("#myself").css("background-color","");
+    if (nowFriend.length > 0){
+        $("#"+nowFriend).css("background-color","");
+        nowFriend = '';
+    }
     if (oldStore != "")
         $("#"+oldStore).css("background-color","");
         
     oldStore = id;
-    $.post("../getStoreMessage/",{'store':oldStore},function(data){
+    $.post("../getStoreMessage/",{'store':oldStore,'page':0},function(data){
         $("#showComments").html(data);
     });
 }
@@ -107,6 +117,7 @@ function changeState(){
     $("#Fb").html(temp);
 }
 
+//用于弹出框中的搜索框
 function searchStore(){
 	storeName = $('#storeName').val();
 	if (check_uname(storeName,'wrongChar')){
@@ -121,6 +132,7 @@ function searchStore(){
 	}
 }
 
+//添加一个新的商铺
 function makeSubmit(){
     storeName = $('.storeName').val();
     storePlace = $('.storePlace').val();
@@ -182,4 +194,80 @@ function commentSubmit(){
                 note += "\n\n信息插入失败！";
         });
     }
+}
+
+//为0代表往前跳转，即页面数字减小；为1为往后跳转，页面数字加大
+function changePageList(p1,p2){
+    id = '';
+    if (p1 == '1'){
+        id ='#a_';
+    }
+    else if (p1 == '0'){
+        id = '#b_';
+    }
+    else if (p1 == '2'){
+        id = '#c_';
+    }
+    
+    if (p2 == '1') {
+        for ( i = 1; i <= 5; i++) {
+            $(id + i).html(parseInt($(id + i).html()) + 5);
+        }
+    } else if (p2 == '0') {
+        temp = parseInt($(id+'1').html());
+        if (temp == 0)
+            return false;
+        else if (temp > 5) {
+            for ( i = 1; i <= 5; i++) {
+                $(id + i).html(parseInt($(id + i).html()) - 5);
+            }
+        }
+    }
+
+    return false;
+}
+
+//更改显示内容
+function changeStoreList(event,p){
+    id = event.id;
+    page = parseInt($('#'+id).html()) - 1;
+    if (p == 1){
+        updateStoreList(page-1);
+    }
+    else if (p == 0){
+        if (nowFriend.length > 0){
+            getUserCommentMessage(nowFriend,page);
+        }
+        else{
+            $.post("../getStoreMessage/",{'store':oldStore,'page':page},function(data){
+                $("#showComments").html(data);
+            });
+        }
+    }
+}
+
+//搜索好友
+function searchFriend(){
+    userName = $('#userName').val();
+    if (check_uname(userName,'wrongChar')){
+        $.post('../searchFriend/',{'username':userName},function(data){
+            if (data.length > 0)
+                $("#showFL").html(data);
+            else
+                $("#wrongChar").html("输入的用户名不是您的好友！");
+        });
+    }
+}
+
+//更新好友列表
+function changeFriendsList(event){
+    id = event.id;
+    page = parseInt($("#"+id).html()) - 1;
+    $.post('../changeFriendsList/',{'page':page},function(data){
+        if (data.length > 0)
+            $("#showFL").html(data);
+        else
+            $("#showFL").html("您尚未添加任何好友！");
+
+    });
 }

@@ -4,17 +4,20 @@
 <html>
     <head>
 		<meta charset="utf-8"/>
-        <title>大众点评</title>
+        <title>我的好友 小众点评</title>
+        <!-- 添加合适的meta标签，与响应式CSS搭配 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="{% static 'mytalk/css/style.css' %}" />
+        <!-- Bootstrap -->
         <link href="{% static 'mytalk/css/bootstrap.css' %}" rel="stylesheet"/>
         <style type="text/css">
       		body {
-        		padding-top: 40px;
-        		padding-bottom: 40px;
+        		padding-top: 50px;
+        		padding-bottom: 30px;
         		margin-bottom: 20px;
-        		background-color: #f5f5f5;
       		}
       	</style>
+      	<!-- 启用响应式CSS -->
 		<link href="{% static 'mytalk/css/bootstrap-responsive.css' %}" rel="stylesheet"/>
         <script src="{% static 'mytalk/js/jquery.js' %}" type="text/javascript"></script>
         <script src="{% static 'mytalk/js/check_input.js' %}" type="text/javascript"></script>
@@ -23,16 +26,43 @@
 	
 	<body>
 		{% include 'mytalk/header.html'%}
-        <div id="showFriendsList">
-            <label id="friendsList">好友列表</label><br/>
-            <div ><label><input class="eachFriend" id="myself" id="{{ uid }}" onclick="showMessage(this.value)" type="submit" value="{{ uid }}"/></label></div>
-            {% for each in friendsList%}
-                <div ><label><input class="eachFriend" id="{{ each }}" onclick="showMessage(this.value)" type="submit" value="{{ each }}"/></label></div>
-            {% endfor %}
-        </div>
-        
-        <div id="showUserMessage">
-            {{ uid }}
-        </div>
+		<div class="title">
+			<h1>全部好友
+			<span class="num">
+				({{ size }}个)
+			</span>
+			</h1>
+		</div>
+		
+		<hr />
+		
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span12">
+					<div class="form-search navbar-form pull-right">
+						<input type="text" class="input-medium search-query" onkeyup="check_uname(this.value,'wrongChar')" id="userName" placeholder="输入好友用户名">
+						<span id="wrongChar"></span>
+						<button type="submit" class="btn" onclick="searchFriend()">搜索</button>
+						<!--<button onclick="addFriend()" class="btn">添加好友</button>	-->					
+					</div>
+					<hr />
+				</div>
+				<div id="showFL">{% include 'mytalk/friendsOperate.html' %}</div>
+			</div>
+			
+			<hr />
+			
+			<div class="pagination setRight">
+				<ul>
+					<li><a onclick="changePageList('2','0')">Prev</a></li>
+					<li><a id="c_1" onclick="changeFriendsList(this)">1</a></li>
+					<li><a id="c_2" onclick="changeFriendsList(this)">2</a></li>
+					<li><a id="c_3" onclick="changeFriendsList(this)">3</a></li>
+                    <li><a id="c_4" onclick="changeFriendsList(this)">4</a></li>
+                    <li><a id="c_5" onclick="changeFriendsList(this)">5</a></li>
+					<li><a onclick="changePageList('2','1')">Next</a></li>
+				</ul>
+			</div>
+		</div>
 	</body>
 </html>
