@@ -11,6 +11,23 @@
 3. 运行**python manage.py runner**运行
 4. 运行**python manager.py syncdb**建立数据库，并创建超级用户。
 
+<<<<<<< HEAD
+=======
+#更新项目
+
+
+----------
+1. 了解git pull和git fetch的区别，参考网址：
+http://my.oschina.net/zimingforever/blog/68621
+2. 简而言之，git pull会自动帮你merge，而git fetch需要自己merge，所以大家都使用git fetch来更新项目，这样才能知道别人改了什么。具体命令：
+> git fetch origin master:tmp  
+> git diff tmp   
+> git merge tmp
+
+
+意思是从远程获取最新的版本到本地的test分支上之后再进行比较合并
+
+>>>>>>> 13b65c53692396cdd3285d75c2108fcdfdeec056
 #提交项目
 
 

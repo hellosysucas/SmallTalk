@@ -38,6 +38,7 @@ def is_uid_exist(uid):
 #判断用户是否合法,需要先验证uid和upassword是否为空等格式是否正确
 def is_user_valid(uid,upassword):
     return True
+
 #判断某一个商店是否存在，传递过来的是商店名字符串
 def is_store_exist(store_name):
 	return True

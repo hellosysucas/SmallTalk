@@ -122,6 +122,7 @@ TEMPLATE_DIRS = (
 	'C:\\Users\\Administrator\\Desktop\\file4mk\\myownfiles\\test4\\SmallTalk\\mytalk\\templates',
 )
 '''
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',

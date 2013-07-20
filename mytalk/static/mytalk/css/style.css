@@ -40,5 +40,17 @@
 }
 
 .setCenter{
-	text-align:center
+	text-align:center;
+}
+
+.setRight{
+	text-align: right;
+}
+
+.setWidth{
+	max-width: 500px !important;
+}
+
+.setNoMarginBottom{
+	margin-bottom: 0px !important;
 }
