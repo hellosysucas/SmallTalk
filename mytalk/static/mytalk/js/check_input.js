@@ -2,7 +2,7 @@ function check_uname(uname, message_container_id){
 	var asc=' 	~`!@#$%^&*()_-+=|\{}[]:;<>,.?/';
 	asc+='""';
 	asc+="''";
-	asc+="~·……——|、￥#@《》，。、“”‘’{}【】、、？.";
+	//asc+="~·……——|、￥#@《》，。、“”‘’{}【】、、？.";
 
 	$('#'+message_container_id).html("");
 

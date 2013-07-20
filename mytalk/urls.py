@@ -20,6 +20,11 @@ urlpatterns = patterns('',
     url(r'^detectLogin/$',views.detectLogin),
     url(r'^exitOperation/$',views.exitOperation),
     
+    url(r'^getStoreList/$',views.getStoreList),
+    url(r'^is_store_exist/$',views.isStoreExist),
+	url(r'^insert_new_store/$',views.insertNewStore),
+    url(r'^insert_new_comment/$',views.insertNewComment),
+    
     url(r'^register/$',views.register),
 	url(r'^register/doRegister/$',views.doRegister),
 	

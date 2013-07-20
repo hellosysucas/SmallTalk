@@ -1,5 +1,7 @@
 # Django settings for SmallTalk project.
 #-*- coding:utf-8 -*-
+import os.path
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -13,7 +15,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
 
-        'NAME': '/home/haoaina521/Workplace/workplace_aptana/SmallTalk/sqlite3.db',# Or path to database file if using sqlite3.
+        'NAME': os.path.join(os.path.dirname(__file__), '../sqlite3.db'),# Or path to database file if using sqlite3.
 
         # The following settings are not used with sqlite3:
         'USER': '',
@@ -110,11 +112,16 @@ ROOT_URLCONF = 'SmallTalk.urls'
 WSGI_APPLICATION = 'SmallTalk.wsgi.application'
 
 TEMPLATE_DIRS = (
+    os.path.join(os.path.dirname(__file__), 'mytalk/templates'),
+)
+'''
+TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-	'/home/haoaina521/Workplace/workplace_aptana/SmallTalk/templates',
+	'C:\\Users\\Administrator\\Desktop\\file4mk\\myownfiles\\test4\\SmallTalk\\mytalk\\templates',
 )
+'''
 
 INSTALLED_APPS = (
     'django.contrib.auth',

@@ -39,6 +39,10 @@ def is_uid_exist(uid):
 def is_user_valid(uid,upassword):
     return True
 
+#判断某一个商店是否存在，传递过来的是商店名字符串
+def is_store_exist(store_name):
+	return True
+	
 #获得用户信息,包括用户邮箱Email
 def getUserMessage(uid):
     message = {'uid':uid,'email':'123@qq.com'}
@@ -59,6 +63,23 @@ def getUserComments(uid):
     talk = [store1,store2]
     return talk
     
+#获得公开的所有商店的所有评论,注意，是公开显示的评论
+def getCommonComments():
+    comment1 = ["good","very good","not bad","4"]
+    store1 = {"name":"store1","place":"guang zhou","comment":comment1}
+    
+    comment2 = ["bad","very bad","so bad","4"]
+    store2 = {"name":"store2","place":"shang hai","comment":comment2}
+    
+    comment3 = ["bad3","very bad3","so bad3","4"]
+    store3 = {"name":"store3","place":"shang hai","comment":comment3}
+    talk = [store1,store2,store3]
+    return talk    
+
+#插入一条新的评论，comment为评论内容，store_name为商店名，uid为用户，visibility为一个int类型的值，1代表公共可见，0代表好友可见
+def insert_new_comment(comment,store_name,uid,visibility):
+    return True
+
 #获取热门商店,以及评论
 def getHostStore():
     comment1 = ["good","very good","not bad","4"]
@@ -69,13 +90,22 @@ def getHostStore():
     talk = [store1,store2]
     return talk
 
-#获得某一个商店的所有评论信息,store 为商店名,最后返回一个只有一个元素的数组,方便函数重用
+#获得第page+1个四个商店名，例如第零页的四个商店名，第二页的四个商店名
+def getPageStoreList(page):
+    storeList = ["store1","store2","store3","store4"]
+    return storeList
+    
+#获得某一个商店的所有评论信息,store 为商店名,最后返回一个只有一个元素的数组,方便函数重用,如果没有这个商店，返回一个空数组
 def getTheStoreMessage(store):
     comment1 = ["good","very good","not bad","4"]
     theStore = {"name":store,"place":"guang zhou","comment":comment1}
     
     talk = [theStore]
     return talk
+    
+#插入新的商店，插入成功返回true
+def insert_new_store(store_name,store_place):
+    return True
     
 #删除用户uid的好友friend
 def deleteUserFriend(uid,friend):
@@ -241,8 +271,52 @@ def doRegister(request):
 '''获得某一个商店的所有评论信息'''
 def getStoreMessage(request):
     store = request.POST.get("store")
-    talk = getTheStoreMessage(store)
+    if store != "":
+        talk = getTheStoreMessage(store)
+    else:
+        talk = getCommonComments()
     return render_to_response('mytalk/showUserComments.html',{'talk':talk})
 
 def doSearch(request):
     return render_to_response('mytalk/search.html')
+'''获得第几页的商店列表'''
+def getStoreList(request):
+    page = int(request.POST.get("page"))
+    storeList = getPageStoreList(page)
+    return render_to_response('mytalk/showStoreList.html',{'storeList':storeList})
+	
+'''商店是否存在，存在返回网页'''
+def isStoreExist(request):
+    store_name = request.POST.get('store')
+    if is_store_exist(store_name):
+        storeList = [store_name]
+        return render_to_response('mytalk/showStoreList.html',{'storeList':storeList})
+    return HttpResponse("")
+    
+'''插入新的商店'''
+def insertNewStore(request):
+    store_name = request.POST.get('storeName')
+    store_place = request.POST.get('storePlace')
+    if insert_new_store(store_name,store_place):
+        storeList = [store_name]
+        return render_to_response('mytalk/showStoreList.html',{'storeList':storeList})
+    else:
+        return HttpResponse("")
+        
+'''插入新的评论'''
+def insertNewComment(request):
+    uid = ''
+    if request.session.get('uid') == None:
+        return render_to_response('mytalk/index.html',{'uid':uid})
+        
+    comment = request.POST.get('comment')
+    store_name = request.POST.get('store')
+    uid = request.session.get('uid')
+    visibility = int(request.POST.get('visibility'))
+    
+    if insert_new_comment(comment,store_name,uid,visibility):
+        talk = getTheStoreMessage(store_name)
+        return render_to_response('mytalk/showUserComments.html',{'talk':talk})
+    else:
+        return HttpResponse("")
+    
