@@ -12,6 +12,9 @@
 4. 运行**python manager.py syncdb**建立数据库，并创建超级用户。
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 71a11765007fa90acda885daa1275dc72d5b9bbf
 =======
 #更新项目
 
@@ -27,7 +30,10 @@ http://my.oschina.net/zimingforever/blog/68621
 
 意思是从远程获取最新的版本到本地的test分支上之后再进行比较合并
 
+<<<<<<< HEAD
 >>>>>>> 13b65c53692396cdd3285d75c2108fcdfdeec056
+=======
+>>>>>>> 71a11765007fa90acda885daa1275dc72d5b9bbf
 #提交项目
 
 

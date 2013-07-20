@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
     #url(r'^site_media/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.STATIC_PATH}),
+    
     #initial and test database
     url(r'^test/$', views.test),  
     
@@ -34,11 +35,6 @@ urlpatterns = patterns('',
     url(r'^friends/$',views.friends),
     url(r'^friends/message/$',views.message),
     url(r'^friends/deleteFriend/$',views.deleteFriend),
-	url(r'^searchFriend/$',views.searchFriend),
-    url(r'^changeFriendsList/$',views.changeFriendsList),
-    
+	
     url(r'^exchangeUserMessage/$',views.exchangeUserMessage),
-    
-    url(r'^search/$',views.doSearch),
 )
-
