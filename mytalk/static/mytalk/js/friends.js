@@ -71,7 +71,7 @@ function showStoreMessage(event){
         $("#"+oldStore).css("background-color","");
         
     oldStore = id;
-    $.post("../getStoreMessage/",{'store':oldStore,'page':0},function(data){
+    $.post("../getStoreMessage/",{'store':oldStore,'page':'0'},function(data){
         $("#showComments").html(data);
     });
 }
