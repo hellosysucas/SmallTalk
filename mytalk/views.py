@@ -12,20 +12,59 @@ from django import forms
 from django.http import HttpResponseRedirect
 from mytalk.models import User,Store,Label,Comment,Reply
 
+    
 #添加好友
 def become_my_friend(uid,friendName):
-    return True
+    try:
+        user = User.objects.get(id = uid)
+        
+        if len( user.friends.filter(id = friendName) ) == 0:
+            friend = User.objects.get(id = friendName)
+            user.friends.add(friend)
+            
+        return True
+    except:
+        print "errors in become_my_friend"
+        return False
 
     
 #获得某一个商店的所有评论信息,store 为商店名,最后返回一个只有一个元素的数组,方便函数重用,如果没有这个商店，返回一个空数组；同样每一页12个评论
 def getTheStoreMessage(store,page):
-    comment1 = ["good","very good","not bad","4"]
-    author1 = ['tom1','tom2','tom3','tom4']
-    theStore = {"name":store,"place":"guang zhou","comment":comment1,'author':author1}
+    talk = []
+    result = []
     
-    talk = [theStore]
-    return talk
+    page = page * 12
+    try:
+        item = Store.objects.get(name = store)    #store name ?
+             
+        comments = item.comment_set.all().filter(visible = True)
+        comment_tmp = []
+     
+        for comment_item in comments:
+            comment_tmp.append(comment_item.content)
+        
+        store_tmp = {"name": item.name, "place": item.place, "comment": comment_tmp}
+            
+        talk.append(store_tmp)
 
+        num = 0
+        for i in range( len(talk) ):
+            tmp = {"name": talk[i]["name"], "place": talk[i]["place"], "comment": [] }
+            for j in range ( len(talk[i]["comment"])) :
+                if num >= page and num < page + 12:
+                    tmp["comment"].append( talk[i]["comment"][j] )
+                num += 1
+            
+            if len(tmp["comment"]) != 0:
+                result.append(tmp)
+            
+            if num >= page + 12:
+                break        
+        
+    except:
+        print "errors occurs in getTheStoreMessage"
+    
+    return result
     
 #获得用户uid的好友列表,每个页面显示9个好友，page从0开始,没有好友返回空数组
 def getFriendsList(uid,page):
