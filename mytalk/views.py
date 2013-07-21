@@ -20,6 +20,7 @@ def is_uid_name_valid(uid):
     if pattern.match(uid) and len(uid) <= 20:
         return True
     return False    
+
     
 #判断邮箱格式是否合法
 def is_email_name_valid(email):
@@ -184,6 +185,8 @@ def getTheStoreMessage(store,page):
         print "errors occurs in getTheStoreMessage"
     
     return result
+
+
     
 #获得用户uid的好友列表,每个页面显示9个好友，page从0开始,没有好友返回空数组
 def getFriendsList(uid,page):
@@ -200,6 +203,7 @@ def getFriendsList(uid,page):
         print uid + "errors in getFriendsList"
     return friends[page : page + 9]
 
+
 #获得好友人数
 def getFriendsSize(uid):
     try:
@@ -208,6 +212,7 @@ def getFriendsSize(uid):
     except:
         print "errors in getFriendsSize"
         return 0
+
 
 #获得某个人的所有评论过的商店的所有评论,按照商店显示；页数代表每一页显示12条评论，第0也代表0~11的评论，第1页代表12~23的评论，以商店为单位
 def getUserComments(uid,page):
@@ -584,10 +589,7 @@ def insertNewComment(request):
     comment = request.POST.get('comment')
     store_name = request.POST.get('store')
     uid = request.session.get('uid')
-    if request.POST.get('visibility') == '1':
-        visibility = True
-    else:
-        visibility = False
+    visibility = int(request.POST.get('visibility'))
     
     if insert_new_comment(comment,store_name,uid,visibility):
         talk = getTheStoreMessage(store_name,0)

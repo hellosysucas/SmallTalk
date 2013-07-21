@@ -596,9 +596,10 @@ class InsertNewUserTest(TestCase):
         #self.assertFalse(res)
         #此处未检查参数合法性，不过在调用该函数的地方已经检查了合法性
     
-
-#
-
-
-
+#test hashPassword(password)函数
+class HashPasswordTest(TestCase):
+    def test_0(self):
+        password = '31af23'
+        res = hashPassword(password)
+        self.assertNotEquals(res, password)
 

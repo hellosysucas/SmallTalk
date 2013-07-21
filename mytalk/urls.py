@@ -14,7 +14,6 @@ urlpatterns = patterns('',
     # url(r'^admin/', include(admin.site.urls)),
     #url(r'^site_media/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.STATIC_PATH}),
     #initial and test database
-    url(r'^test/$', views.test),  
     
     url(r'^$',views.index,name='index'),
     url(r'^signIn/$',views.signIn),
