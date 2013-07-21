@@ -5,23 +5,20 @@
 			
 				<div class="span6">
 					<h2>{{ eachStore.name }}</h2>
-					<p class="{{ eachStore.name}}_{{ forloop.counter }}" style="display:none">
-						{{ eachComment }}
-					</p>
-			
+	
 					<p class="p_{{ forloop.counter }}_{{ eachStore.name}}">
 						{{ eachComment.0 }}{{ eachComment.1 }}{{ eachComment.2 }}{{ eachComment.3 }}{{ eachComment.4 }}{{ eachComment.5 }}{{ eachComment.6 }}{{ eachComment.7 }}{{ eachComment.8 }}{{ eachComment.9 }}{{ eachComment.10 }}{{ eachComment.11 }}{{ eachComment.12 }}{{ eachComment.13 }}{{ eachComment.14 }}{{ eachComment.15 }}{{ eachComment.16 }}{{ eachComment.17 }}{{ eachComment.18 }}{{ eachComment.19 }}...
 					</p>
 			
 					<p>
 
-						<a class="btn" href="#detailsModal" role="button" data-toggle="modal"
+						<a class="btn" href="#detailsModal{{forloop.parentloop.counter}}{{forloop.counter}}" role="button" data-toggle="modal"
 						id="{{ eachStore.name}}_{{ forloop.counter }}_a">更多 &raquo;</a>
 						<!-- Modal -->
-						<div id="detailsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div id="detailsModal{{forloop.parentloop.counter}}{{forloop.counter}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				
 							<div class="modal-body">
-								<p class="{{ eachStore.name}}_{{ forloop.counter }}">
+								<p class="{{ eachStore.name}}_{{ forloop.counter }}" style="display">
 									{{ eachComment }}
 								</p>
 							</div>
@@ -38,19 +35,16 @@
 			<div class="row-fluid" >
 				<div class="span6">
 					<h2>{{ eachStore.name }}</h2>
-					<p class="{{ eachStore.name}}_{{ forloop.counter }}" style="display:none">
-						{{ eachComment }}
-					</p>
 			
 					<p class="p_{{ forloop.counter }}_{{ eachStore.name}}">
 						{{ eachComment.0 }}{{ eachComment.1 }}{{ eachComment.2 }}{{ eachComment.3 }}{{ eachComment.4 }}{{ eachComment.5 }}{{ eachComment.6 }}{{ eachComment.7 }}{{ eachComment.8 }}{{ eachComment.9 }}{{ eachComment.10 }}{{ eachComment.11 }}{{ eachComment.12 }}{{ eachComment.13 }}{{ eachComment.14 }}{{ eachComment.15 }}{{ eachComment.16 }}{{ eachComment.17 }}{{ eachComment.18 }}{{ eachComment.19 }}...
 					</p>
 			
 					<p>
-						<a class="btn" href="#detailsModal" role="button" data-toggle="modal"
+						<a class="btn" href="#detailsModal{{forloop.parentloop.counter}}{{forloop.counter}}" role="button" data-toggle="modal"
 							id="{{ eachStore.name}}_{{ forloop.counter }}_a">更多 &raquo;</a>
 						<!-- Modal -->
-						<div id="detailsModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div id="detailsModal{{forloop.parentloop.counter}}{{forloop.counter}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	
 						  <div class="modal-body">
 						  	<p class="{{ eachStore.name}}_{{ forloop.counter }}" style="display">

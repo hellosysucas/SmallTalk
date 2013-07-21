@@ -4,9 +4,9 @@
 	<li>
 		<a id="myself" onclick="showMessage(this)" >{{ uid }}</a>
 	</li>
-    {% for each in friendsList%}
-        <li>
-            <a id="{{ each }}" onclick="showMessage(this)">{{ each }}</a>
-        </li>
-    {% endfor %}
+	{% for each in friendsList%}
+	<li>
+		<a id="{{ each }}" onclick="showMessage(this)">{{ each }}</a>
+	</li>
+	{% endfor %}
 </ul>
