@@ -12,3 +12,11 @@ class LabelInline(admin.TabularInline):
 class StoreAdmin(admin.ModelAdmin):
     inlines = [LabelInline]
 
+
+admin.site.register(Store, StoreAdmin)
+
+#User
+admin.site.register(User)
+
+#Comment
+admin.site.register(Comment)
