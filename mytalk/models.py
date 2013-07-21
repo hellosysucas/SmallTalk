@@ -32,6 +32,7 @@ class Comment(models.Model):
     pub_time = models.DateTimeField(auto_now = True)
     content = models.TextField()
     visible = models.BooleanField()
+    
     def __unicode__(self):
         return self.author.id + "     " +self.content
 

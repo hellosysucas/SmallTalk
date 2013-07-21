@@ -93,11 +93,12 @@
                                     
                                     <div class="caption">
                                         <h3>商店名{{ content }}</h3>
-                                        <p><a>{{ eachTalk.author.forloop.counter }}</a>:{{ eachComment }}</p>
-                                        <a href="#shopModal" role="button"
-                                            class="btn btn-primary" data-toggle="modal"> 更多... </a>
+                                        <p><a>{{ eachTalk.author.forloop.counter0 }}</a>:{{ eachComment }}</p>
+                                        <a href="#shopModal" role="button" id="{{content}}"
+                                            onclick="changeUserState(this)" class="btn btn-primary" data-toggle="modal"> 更多... </a>
                                         <div id="shopModal" class="modal hide fade" tabindex="-1" role="dialog"
                                                aria-labelledby="shopModalLabel" aria-hidden="true">
+                                               <div id="showShopComments1"></div>
                                         </div>
                                     </div>
                                 </div>

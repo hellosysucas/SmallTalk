@@ -11,7 +11,7 @@ $(function(){
         getUserCommentMessage(myself,0);
     }
     else{
-        $.post("../getStoreMessage/",{'store':oldStore,'page':0},function(data){
+        $.post("../getStoreMessage/",{'store':oldStore,'page':'0'},function(data){
             $("#showComments").html(data);
         });
     }
@@ -71,7 +71,7 @@ function showStoreMessage(event){
         $("#"+oldStore).css("background-color","");
         
     oldStore = id;
-    $.post("../getStoreMessage/",{'store':oldStore,'page':0},function(data){
+    $.post("../getStoreMessage/",{'store':oldStore,'page':'0'},function(data){
         $("#showComments").html(data);
     });
 }
@@ -297,5 +297,12 @@ function beFriend(event){
     friendName = (id.split('_'))[0];
     $.post('../beFriend/',{'username':friendName},function(data){
         $('#'+id).html(data);
+    });
+}
+
+function changeUserState(event){
+	content = shopName = event.id;
+	$.post('../changeShopState/',{'store':shopName,'content':content},function(data){
+        $('#showShopComments1').html(data);
     });
 }
