@@ -1,0 +1,81 @@
+<!-- Modal -->
+
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal"
+		aria-hidden="true">
+			×
+		</button>
+		<div class="row-fluid">
+			<p id="shopModalLabel">
+				商户名
+			</p>
+			<p id="shopAdrModalLabel">
+				商户地址{{ eachTalk.place }}
+			</p>
+		</div>
+	</div>
+
+	<div class="modal-body">
+		<ul class="thumbnails">
+			<li class="span6">
+				<div class="thumbnail">
+					<img class="span4" data-src="holder.js/160x120" alt=""
+					src="http://imgstatic.baidu.com/img/image/shouye/yiping1.jpg">
+
+					<div class="caption">
+						<h3>用户名</h3>
+						<p>
+							最近的点评
+						</p>
+					</div>
+				</div>
+			</li>
+			<li class="span6">
+				<div class="thumbnail">
+					<img class="span4" data-src="holder.js/160x120" alt=""
+					src="http://imgstatic.baidu.com/img/image/shouye/yiping1.jpg">
+
+					<div class="caption">
+						<h3>用户名</h3>
+						<p>
+							最近的点评
+						</p>
+					</div>
+				</div>
+			</li>
+		</ul>
+		
+		<div class="pagination pagination-small pagination-centered">
+			<ul>
+                <li>
+                    <a onclick="changePageList('0','0')">Prev</a>
+                </li>
+                <li>
+                    <a id="b_1" onclick="changeStoreList(this,'0')">1</a>
+                </li>
+                <li>
+                    <a id="b_2" onclick="changeStoreList(this,'0')">2</a>
+                </li>
+                <li>
+                    <a id="b_3" onclick="changeStoreList(this,'0')">3</a>
+                </li>
+                <li>
+                    <a id="b_4" onclick="changeStoreList(this,'0')">4</a>
+                </li>
+                <li>
+                    <a id="b_5" onclick="changeStoreList(this,'0')">5</a>
+                </li>
+                <li>
+                    <a onclick="changePageList('0','1')">Next</a>
+                </li>
+            </ul>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">
+			关闭
+		</button>
+		<button class="btn btn-primary">
+			确定
+		</button>
+	</div>
