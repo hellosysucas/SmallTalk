@@ -1,56 +1,47 @@
 #header {
-    height:25px;
-    background-color:yellow;
-    font-size:15pt;
-    text-align:right;
+	height:25px;
+	background-color:yellow;
+	font-size:15pt;
+	text-align:right;
 }
 #ope {
-    display:none;
+	display:none;
 }
-
 #header_exit {
-    float:right;
-    margin-left:10px;
-    margin-right:10px;
+	float:right;
+	margin-left:10px;
+	margin-right:10px;
 }
-
-#wrongChar,#wrongEmail,#wrongPassword,#wrongUpdatePassword,#showError{
-    color:red;
+#wrongChar, #wrongEmail, #wrongPassword, #wrongUpdatePassword, #showError {
+	color:red;
 }
-
 .eachFriend {
-    background-color:white;
-    border:1px solid black;
-    width:100%;
+	background-color:white;
+	border:1px solid black;
+	width:100%;
 }
-
 #showFriendsList {
-    float:left;
-    width:10%;
-    margin:10px;
-    border:1px solid green;
-    overflow:hidden;   
+	float:left;
+	width:10%;
+	margin:10px;
+	border:1px solid green;
+	overflow:hidden;
 }
-
 #showUserMessage {
-    float:left;
-    width:85%;
-    margin:10px;
-    border:1px solid green;
+	float:left;
+	width:85%;
+	margin:10px;
+	border:1px solid green;
 }
-
-.setCenter{
+.setCenter {
 	text-align:center;
 }
-
-.setRight{
-	text-align: right;
+.setRight {
+	text-align:right;
 }
-
-.setWidth{
-	max-width: 500px !important;
+.setWidth {
+	max-width:500px !important;
 }
-
-.setNoMarginBottom{
-	margin-bottom: 0px !important;
+.setNoMarginBottom {
+	margin-bottom:0px !important;
 }

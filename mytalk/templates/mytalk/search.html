@@ -3,7 +3,7 @@
 <!--主题页面，被显示的主页面-->
 <html>
 	<head>
-        <title>欢迎来到小众点评网</title>
+		<title>欢迎来到小众点评网</title>
 		<!-- 添加合适的meta标签，与响应式CSS搭配 -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<!-- Bootstrap -->
@@ -11,21 +11,21 @@
 		<!-- 设置导航栏和布局之间的间隔 -->
 		<style type="text/css">
 			body {
-				padding-top: 60px;
-				padding-bottom: 20px;
+				padding-top:60px;
+				padding-bottom:20px;
 			}
-	
 			.sidebar-nav {
-				padding: 9px 0;
+				padding:9px 0;
 			}
 		</style>
-		<link href="{% static 'mytalk/css/bootstrap-responsive.css' %}" rel="stylesheet"><!-- 启用响应式CSS -->
-		<link rel="stylesheet" type="text/css" href="{% static 'mytalk/css/style.css' %}" />  	
-		<script src="{% static 'mytalk/js/jquery.js' %}" type="text/javascript"></script>    
-	    <script src="{% static 'mytalk/js/check_input.js' %}" type="text/javascript"></script>
-        <script src="{% static 'mytalk/js/friends.js' %}" type="text/javascript"></script>
-    </head>
-	
+		<link href="{% static 'mytalk/css/bootstrap-responsive.css' %}" rel="stylesheet">
+		<!-- 启用响应式CSS -->
+		<link rel="stylesheet" type="text/css" href="{% static 'mytalk/css/style.css' %}" />
+		<script src="{% static 'mytalk/js/jquery.js' %}" type="text/javascript"></script>
+		<script src="{% static 'mytalk/js/check_input.js' %}" type="text/javascript"></script>
+		<script src="{% static 'mytalk/js/friends.js' %}" type="text/javascript"></script>
+	</head>
+
 	<body>
 		{% include 'mytalk/header.html'%}
 		<!-- 固定布局 -->
@@ -35,81 +35,84 @@
 				<div class="span4 offset4">
 					<div class="input-append span12">
 						<input class="span12" id="appendedInputButtons" type="text" onkeyup="check_uname(this.value,'wrongChar2')"/>
-						
+
 						<button class="btn" type="button">
 							搜索
 						</button>
 
 						<div class="btn-group">
-							<a class="btn dropdown-toggle" id="Sa" data-toggle="dropdown" href=""> 
-								商户
-								<span class="caret"> </span> 
-							</a>
+							<a class="btn dropdown-toggle" id="Sa" data-toggle="dropdown" href=""> 商户 <span class="caret"> </span> </a>
 							<ul class="dropdown-menu">
 								<!-- dropdown menu links -->
-								<li><a id="Sb" onclick="changeSituation(this)">用户</a></li>
+								<li>
+									<a id="Sb" onclick="changeSituation(this)">用户</a>
+								</li>
 							</ul>
 						</div>
 					</div>
 				</div>
 				<div class="span10 offset1">
-                <span id="wrongChar2"></span>
-				<div class="hero-unit">
-					<div class="row-fluid">
-					{% for each in message %}
-                    {% ifequal each.type '1' %}
-						<ul class="thumbnails">
-						{% for eachTalk in each.talk %}
-						{% for eachComment in eachTalk.comment %}
-							<li class="span6">
-								<div class="thumbnail">
-									<img class="span4" data-src="holder.js/160x120" alt=""
+					<span id="wrongChar2"></span>
+					<div class="hero-unit">
+						<div class="row-fluid">
+							{% for each in message %}
+							{% ifequal each.type '1' %}
+							<ul class="thumbnails">
+								{% for eachTalk in each.talk %}
+								{% for eachComment in eachTalk.comment %}
+								<li class="span6">
+									<div class="thumbnail">
+										<img class="span4" data-src="holder.js/160x120" alt=""
 										src="http://imgstatic.baidu.com/img/image/shouye/yiping1.jpg">
-									
-									<div class="caption">
-										<h3>用户名{{ content }}</h3>
-										<p><a>{{ eachTalk.name }}</a>:{{ eachComment }}</p>
-										<a href="#userModal" role="button" id="{{ eachTalk.name }}_{{ content }}"
+
+										<div class="caption">
+											<h3>用户名{{ content }}</h3>
+											<p>
+												<a>{{ eachTalk.name }}</a>:{{ eachComment }}
+											</p>
+											<a href="#userModal" role="button" id="{{ eachTalk.name }}_{{ content }}"
 											onclick="changeShopState(this)" class="btn btn-primary" data-toggle="modal"> 更多... </a>
-										<div id="userModal" class="modal hide fade" tabindex="-1" role="dialog"
-                                            aria-labelledby="userModalLabel" aria-hidden="true">
-										      <div id="showShopComments"></div>
+											<div id="userModal" class="modal hide fade" tabindex="-1" role="dialog"
+											aria-labelledby="userModalLabel" aria-hidden="true">
+												<div id="showShopComments"></div>
+											</div>
+											<a class="btn" id="{{content}}_{{forloop.parentloop.counter}}{{ forloop.counter }}" onclick="beFriend(this)">关注TA</a>
 										</div>
-										<a class="btn" id="{{content}}_{{forloop.parentloop.counter}}{{ forloop.counter }}" onclick="beFriend(this)">关注TA</a>
 									</div>
-								</div>
-							</li>
-						{% endfor %}
-                        {% endfor %}
-						</ul>
-				    {% else %}
-				        <ul class="thumbnails">
-				        {% for eachTalk in each.talk %}
-				        {% for eachComment in eachTalk.comment %}
-				            <li class="span6">
-                                <div class="thumbnail">
-                                    <img class="span4" data-src="holder.js/160x120" alt=""
-                                        src="http://imgstatic.baidu.com/img/image/shouye/yiping1.jpg">
-                                    
-                                    <div class="caption">
-                                        <h3>商店名{{ content }}</h3>
-                                        <p><a>{{ eachTalk.author.forloop.counter0 }}</a>:{{ eachComment }}</p>
-                                        <a href="#shopModal" role="button" id="{{content}}"
-                                            onclick="changeUserState(this)" class="btn btn-primary" data-toggle="modal"> 更多... </a>
-                                        <div id="shopModal" class="modal hide fade" tabindex="-1" role="dialog"
-                                               aria-labelledby="shopModalLabel" aria-hidden="true">
-                                               <div id="showShopComments1"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        {% endfor %}
-                        {% endfor %}
-				        </ul>
-				    {% endifequal %}
-				    {% endfor %}
+								</li>
+								{% endfor %}
+								{% endfor %}
+							</ul>
+							{% else %}
+							<ul class="thumbnails">
+								{% for eachTalk in each.talk %}
+								{% for eachComment in eachTalk.comment %}
+								<li class="span6">
+									<div class="thumbnail">
+										<img class="span4" data-src="holder.js/160x120" alt=""
+										src="http://imgstatic.baidu.com/img/image/shouye/yiping1.jpg">
+
+										<div class="caption">
+											<h3>商店名{{ content }}</h3>
+											<p>
+												<a>{{ eachTalk.author.forloop.counter0 }}</a>:{{ eachComment }}
+											</p>
+											<a href="#shopModal" role="button" id="{{content}}"
+											onclick="changeUserState(this)" class="btn btn-primary" data-toggle="modal"> 更多... </a>
+											<div id="shopModal" class="modal hide fade" tabindex="-1" role="dialog"
+											aria-labelledby="shopModalLabel" aria-hidden="true">
+												<div id="showShopComments1"></div>
+											</div>
+										</div>
+									</div>
+								</li>
+								{% endfor %}
+								{% endfor %}
+							</ul>
+							{% endifequal %}
+							{% endfor %}
+						</div>
 					</div>
-				</div>
 				</div>
 			</div>
 			{% include "mytalk/footer.html" %}
