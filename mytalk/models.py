@@ -41,21 +41,3 @@ class Reply(models.Model):
     author = models.ForeignKey(User)
     pub_time = models.DateTimeField(auto_now = True)
     content = models.TextField()
-
-#系统管理员方便管理
-
-#Store
-class LabelInline(admin.TabularInline):
-    model = Label
-    extra = 0
-
-class StoreAdmin(admin.ModelAdmin):
-    inlines = [LabelInline]
-
-admin.site.register(Store, StoreAdmin)
-
-#User
-admin.site.register(User)
-
-#Comment
-admin.site.register(Comment)

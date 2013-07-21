@@ -10,8 +10,129 @@ import datetime, re
 import time
 from django import forms
 from django.http import HttpResponseRedirect
-from mytalk.models import User,Store,Label,Comment,Reply,LabelInline,StoreAdmin
 from django.db.models import Q
+from mytalk.models import User,Store,Label,Comment,Reply
+
+
+#判断用户名是否格式合法
+def is_uid_name_valid(uid):
+    pattern = re.compile(r'[A-Za-z](\w|_| )*')
+    
+    if pattern.match(uid) and len(uid) <= 20:
+        return True
+    return False    
+
+    
+#判断邮箱格式是否合法
+def is_email_name_valid(email):
+    pattern = re.compile(r'\w*@(\w)+.(com|cn|com.cn)')
+    
+    if pattern.match(email):
+        return True
+    return False
+
+#判断密码是否合法
+def is_password_valid(password):
+    pattern = re.compile(r'\w+')
+    
+    if pattern.match(password):
+        return True
+    return False
+
+#更新用户id为新的newid,true代表成功,需要验证用户名id的格式是否合法
+def update_user_id(uid,newUid):
+    try:
+        user = User.objects.get(id = uid)
+        
+        if is_uid_exist(newUid) == False and is_uid_name_valid(newUid):
+            user.id = newUid
+            user.save()
+            print "save id"
+            User.objects.filter(id = uid).delete()
+            return True
+    except:
+        print "more than one or does not exit"
+        
+    return False
+
+#更新用户uid的邮箱为email,需要验证email的格式是否合法
+def update_user_email(uid,email):
+    try:
+        user = User.objects.get(id = uid)
+        if is_email_name_valid(email):
+            user.email = email
+            user.save()
+            print "save email"
+            return True
+    except:
+        print uid + "more than one or does not exit"
+    
+    return False
+
+#更新用户uid的密码为新的密码password
+def update_user_password(uid,password):
+    try:
+        user = User.objects.get(id = uid)
+        if is_password_valid(password):
+            user.password = password
+            user.save()
+            print "save password"
+            return True
+    except:
+        print uid + "more than one or does not exit"
+    return False
+
+#判断某个用户名是否已经存在
+def is_uid_exist(uid):
+    try:
+        user = User.objects.get(id = uid)
+        return True
+    except:
+        return False
+
+#判断用户是否合法,需要先验证uid和upassword是否为空等格式是否正确
+def is_user_valid(uid,upassword):
+    if is_uid_name_valid(uid) and is_password_valid(upassword) and is_uid_exist(uid):
+        user = User.objects.get(id = uid)
+        if user.password == upassword:
+            return True
+    return False
+
+#判断某一个商店是否存在，传递过来的是商店名字符串
+def is_store_exist(store_name):
+    try:
+        store = Store.objects.get(name = store_name)
+        return True
+    except:
+        return False
+    
+#获得用户信息,包括用户邮箱Email
+def getUserMessage(uid):
+    try:
+        user = User.objects.get(id = uid)
+        return {'uid':user.id, 'email':user.email}
+    except:
+        return {}
+
+
+
+#插入一条新的评论，comment为评论内容，store_name为商店名，uid为用户，visibility为一个bool类型的值，True代表公共可见，False代表好友可见
+def insert_new_comment(comment,store_name,uid,visibility):
+    try:
+        user = User.objects.get(id = uid)
+        store = Store.objects.get(name = store_name)
+        comment = Comment(  author = user,
+                            store = store,
+                            pub_time = time.time(),
+                            content = comment,
+                            visible = visibility
+                          )
+        comment.save()
+        return True
+    except:
+        print "errors occurs in getCommonComments"
+        return False
+
 
 #添加好友
 def become_my_friend(uid,friendName):
@@ -47,7 +168,7 @@ def getTheStoreMessage(store,page,uid):
             comment_tmp.append(comment_item.content)
         
         store_tmp = {"name": item.name, "place": item.place, "comment": comment_tmp}
-            
+        
         talk.append(store_tmp)
 
         num = 0
@@ -69,50 +190,7 @@ def getTheStoreMessage(store,page,uid):
     
     return result
 
-# initia and test database
-def test(request):
-    insert_new_store("test", "here")
-    insert_new_store("test2", "there")
-    insert_new_store("test3", "there")
-    
-    return HttpResponse(getFriendsSize("lc"))
 
-    '''test is_my_friend
-    User.objects.get(id = "mt").friends = User.objects.all()
-    return HttpResponse( is_my_friend("mt", "lc"))
-    '''
-    
-    '''test getUserComments getCommonComments getTheStoreMessage
-    insert_new_comment("false", "test", "lc", False)
-    insert_new_comment("1", "test", "lc", True)
-    insert_new_comment("2", "test", "lc", True)
-    insert_new_comment("3", "test", "lc", True)
-    insert_new_comment("4", "test", "lc", True)
-    insert_new_comment("5", "test", "lc", True)
-    insert_new_comment("6", "test", "lc", True)
-    insert_new_comment("7", "test", "lc", True)
-    insert_new_comment("8", "test", "lc", True)
-    insert_new_comment("9", "test", "lc", True)
-    insert_new_comment("10", "test", "lc", True)
-    insert_new_comment("11", "test", "lc", True)
-    insert_new_comment("12", "test", "lc", False)
-    insert_new_comment("12", "test", "lc", True)
-    insert_new_comment("true2", "test2", "lc", True)
-    insert_new_comment("true3", "test2", "mt", True)
-    insert_new_comment("true4", "test2", "zp", True)
-    insert_new_comment("true5", "test2", "zp", False)
-    insert_new_comment("true6", "test2", "zp", False)
-
-    
-    #return  HttpResponse( getUserComments("lc", 1));
-    #return  HttpResponse( getCommonComments( 1 ));
-    return  HttpResponse( getTheStoreMessage("test", 0));
-    '''
-      
-    '''test getFriendsList
-    User.objects.get(id = "mt").friends = User.objects.all()
-    return HttpResponse( getFriendsList("mt", 1))
-    '''
     
 #获得用户uid的好友列表,每个页面显示9个好友，page从0开始,没有好友返回空数组
 def getFriendsList(uid,page):
@@ -129,6 +207,7 @@ def getFriendsList(uid,page):
         print "errors in getFriendsList"
     return friends[page : page + 9]
 
+
 #获得好友人数
 def getFriendsSize(uid):
     try:
@@ -137,6 +216,7 @@ def getFriendsSize(uid):
     except:
         print "errors in getFriendsSize"
         return 0
+
 
 #获得某个人的所有评论过的商店的所有评论,按照商店显示；页数代表每一页显示12条评论，第0也代表0~11的评论，第1页代表12~23的评论，以商店为单位
 def getUserComments(uid,page):
@@ -180,7 +260,8 @@ def getUserComments(uid,page):
         print "errors occurs in getUserComments"
     
     return result
-    
+
+
 #获得公开的所有商店的所有评论,注意，是公开显示的评论;每一页12个评论，第零页开始
 def getCommonComments(page):
     talk = []
@@ -221,121 +302,6 @@ def getCommonComments(page):
     
     return result
 
-#判断用户名是否格式合法
-def is_uid_name_valid(uid):
-    pattern = re.compile(r'[A-Za-z](\w|_| )*')
-    
-    if pattern.match(uid) and len(uid) <= 20:
-        return True
-    return False    
-    
-#判断邮箱格式是否合法
-def is_email_name_valid(email):
-    pattern = re.compile(r'\w*@(\w)+.(com|cn|org)')
-    
-    if pattern.match(email):
-        return True
-    return False
-
-#判断密码是否合法
-def is_password_valid(password):
-    pattern = re.compile(r'\w+')
-    
-    if pattern.match(password):
-        return True
-    return False
-
-#更新用户id为新的newid,true代表成功,需要验证用户名id的格式是否合法
-def update_user_id(uid,newUid):
-    try:
-        user = User.objects.get(id = uid)
-        
-        if is_uid_exist(newUid) == False and is_uid_name_valid(newUid):
-            user.id = newUid
-            user.save()
-            print "save id"
-            User.objects.filter(id = uid).delete()
-            return True
-    except:
-        print "more than one or does not exit"
-        
-    return False
-
-#更新用户uid的邮箱为email,需要验证email的格式是否合法
-def update_user_email(uid,email):
-    try:
-        user = User.objects.get(id = uid)
-        if is_email_name_valid(email):
-            user.email = email
-            user.save()
-            print "save email"
-            return True
-    except:
-        print "more than one or does not exit"
-    
-    return False
-
-#更新用户uid的密码为新的密码password
-def update_user_password(uid,password):
-    try:
-        user = User.objects.get(id = uid)
-        if is_password_valid(password):
-            user.password = password
-            user.save()
-            print "save password"
-            return True
-    except:
-        print "more than one or does not exit"
-    return False
-
-#判断某个用户名是否已经存在
-def is_uid_exist(uid):
-    try:
-        user = User.objects.get(id = uid)
-        return True
-    except:
-        return False
-
-#判断用户是否合法,需要先验证uid和upassword是否为空等格式是否正确
-def is_user_valid(uid,upassword):
-    if is_uid_name_valid(uid) and is_password_valid(upassword) and is_uid_exist(uid):
-        user = User.objects.get(id = uid)
-        if user.password == upassword:
-            return True
-    return False
-
-#判断某一个商店是否存在，传递过来的是商店名字符串
-def is_store_exist(store_name):
-    try:
-        store = Store.objects.get(name = store_name)
-        return True
-    except:
-        return False
-    
-#获得用户信息,包括用户邮箱Email
-def getUserMessage(uid):
-    try:
-        user = User.objects.get(id = uid)
-        return {'uid':user.id, 'email':user.email}
-    except:
-        return {'uid':uid, 'email':''}  
-
-#插入一条新的评论，comment为评论内容，store_name为商店名，uid为用户，visibility为一个int类型的值，1代表公共可见，0代表好友可见
-def insert_new_comment(comment,store_name,uid,visibility):
-    try:
-        user = User.objects.get(id = uid)
-        store = Store.objects.get(name = store_name)
-        comment = Comment(  author = user,
-                            store = store,
-                            pub_time = time.time(),
-                            content = comment,
-                            visible = visibility
-                          )
-        comment.save() 
-        return True
-    except:
-        print "errors occurs in getCommonComments"
-        return False
 
 #判断friendName是否为uid的好友，true代表是好友关系
 def is_my_friend(uid,friendName):
