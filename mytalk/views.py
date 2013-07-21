@@ -10,8 +10,7 @@ import datetime, re
 import time
 from django import forms
 from django.http import HttpResponseRedirect
-from mytalk.models import User,Store,Label,Comment,Reply
-
+from mytalk.models import User,Store,Label,Comment,Reply,LabelInline,StoreAdmin
     
 #添加好友
 def become_my_friend(uid,friendName):
@@ -65,6 +64,51 @@ def getTheStoreMessage(store,page):
         print "errors occurs in getTheStoreMessage"
     
     return result
+
+# initia and test database
+def test(request):
+    insert_new_store("test", "here")
+    insert_new_store("test2", "there")
+    insert_new_store("test3", "there")
+    
+    return HttpResponse(getFriendsSize("lc"))
+
+    '''test is_my_friend
+    User.objects.get(id = "mt").friends = User.objects.all()
+    return HttpResponse( is_my_friend("mt", "lc"))
+    '''
+    
+    '''test getUserComments getCommonComments getTheStoreMessage
+    insert_new_comment("false", "test", "lc", False)
+    insert_new_comment("1", "test", "lc", True)
+    insert_new_comment("2", "test", "lc", True)
+    insert_new_comment("3", "test", "lc", True)
+    insert_new_comment("4", "test", "lc", True)
+    insert_new_comment("5", "test", "lc", True)
+    insert_new_comment("6", "test", "lc", True)
+    insert_new_comment("7", "test", "lc", True)
+    insert_new_comment("8", "test", "lc", True)
+    insert_new_comment("9", "test", "lc", True)
+    insert_new_comment("10", "test", "lc", True)
+    insert_new_comment("11", "test", "lc", True)
+    insert_new_comment("12", "test", "lc", False)
+    insert_new_comment("12", "test", "lc", True)
+    insert_new_comment("true2", "test2", "lc", True)
+    insert_new_comment("true3", "test2", "mt", True)
+    insert_new_comment("true4", "test2", "zp", True)
+    insert_new_comment("true5", "test2", "zp", False)
+    insert_new_comment("true6", "test2", "zp", False)
+
+    
+    #return  HttpResponse( getUserComments("lc", 1));
+    #return  HttpResponse( getCommonComments( 1 ));
+    return  HttpResponse( getTheStoreMessage("test", 0));
+    '''
+      
+    '''test getFriendsList
+    User.objects.get(id = "mt").friends = User.objects.all()
+    return HttpResponse( getFriendsList("mt", 1))
+    '''
     
 #获得用户uid的好友列表,每个页面显示9个好友，page从0开始,没有好友返回空数组
 def getFriendsList(uid,page):
@@ -183,7 +227,7 @@ def is_uid_name_valid(uid):
     
 #判断邮箱格式是否合法
 def is_email_name_valid(email):
-    pattern = re.compile(r'\w*@(\w)+.(com|cn|com.cn)')
+    pattern = re.compile(r'\w*@(\w)+.(com|cn|org)')
     
     if pattern.match(email):
         return True
@@ -270,11 +314,9 @@ def getUserMessage(uid):
         user = User.objects.get(id = uid)
         return {'uid':user.id, 'email':user.email}
     except:
-        return {}
+        return {'uid':uid, 'email':''}  
 
-
-
-#插入一条新的评论，comment为评论内容，store_name为商店名，uid为用户，visibility为一个bool类型的值，True代表公共可见，False代表好友可见
+#插入一条新的评论，comment为评论内容，store_name为商店名，uid为用户，visibility为一个int类型的值，1代表公共可见，0代表好友可见
 def insert_new_comment(comment,store_name,uid,visibility):
     try:
         user = User.objects.get(id = uid)
@@ -285,7 +327,7 @@ def insert_new_comment(comment,store_name,uid,visibility):
                             content = comment,
                             visible = visibility
                           )
-        comment.save()
+        comment.save() 
         return True
     except:
         print "errors occurs in getCommonComments"
@@ -581,10 +623,7 @@ def insertNewComment(request):
     comment = request.POST.get('comment')
     store_name = request.POST.get('store')
     uid = request.session.get('uid')
-    if request.POST.get('visibility') == '1':
-        visibility = True
-    else:
-        visibility = False
+    visibility = int(request.POST.get('visibility'))
     
     if insert_new_comment(comment,store_name,uid,visibility):
         talk = getTheStoreMessage(store_name,0)
