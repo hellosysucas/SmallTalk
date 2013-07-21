@@ -6,12 +6,11 @@ from django.contrib import admin
 class User(models.Model):
     id = models.CharField(primary_key = True, max_length = 20 )
     password = models.CharField(max_length = 20)
-    email = models.EmailField(null = True, blank = True)
+    email = models.EmailField()
     friends = models.ManyToManyField('self', null = True, blank = True, symmetrical=False)
     
     def __unicode__(self):
         return self.id
-
 
 class Store(models.Model):
     name = models.CharField(max_length = 50)
@@ -37,10 +36,8 @@ class Comment(models.Model):
     def __unicode__(self):
         return self.author.id + "     " +self.content
 
-
 class Reply(models.Model):
     obj = models.ForeignKey(Comment)
     author = models.ForeignKey(User)
     pub_time = models.DateTimeField(auto_now = True)
     content = models.TextField()
-

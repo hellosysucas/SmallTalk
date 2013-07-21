@@ -10,6 +10,7 @@ import datetime, re
 import time
 from django import forms
 from django.http import HttpResponseRedirect
+from django.db.models import Q
 from mytalk.models import User,Store,Label,Comment,Reply
 
 
@@ -149,15 +150,18 @@ def become_my_friend(uid,friendName):
 
     
 #获得某一个商店的所有评论信息,store 为商店名,最后返回一个只有一个元素的数组,方便函数重用,如果没有这个商店，返回一个空数组；同样每一页12个评论
-def getTheStoreMessage(store,page):
+def getTheStoreMessage(store,page,uid):
     talk = []
     result = []
     
     page = page * 12
     try:
         item = Store.objects.get(name = store)    #store name ?
-             
-        comments = item.comment_set.all().filter(visible = True)
+        if len(uid) > 0:
+            user = User.objects.get(id = uid)
+            comments = item.comment_set.all().filter( Q(visible = True) | Q(author = user) )
+        else:
+            comments = item.comment_set.all().filter(visible = True)
         comment_tmp = []
      
         for comment_item in comments:
@@ -200,7 +204,7 @@ def getFriendsList(uid,page):
             if i.id != uid:
                 friends.append(i.id)
     except:
-        print uid + "errors in getFriendsList"
+        print "errors in getFriendsList"
     return friends[page : page + 9]
 
 
@@ -307,7 +311,7 @@ def is_my_friend(uid,friendName):
             return True
         
     except:
-        print "erros in is_my_friend"
+        print "erros in is_my_friend ",uid,friendName
     
     return False
 
@@ -515,16 +519,25 @@ def message(request):
     friend = request.POST.get('username')
     page = int(request.POST.get('page'))
     
-    talk = getUserComments(uid,page)
+    if friend == "myself":
+        friend = uid
+    talk = getUserComments(friend,page)
+   
     return render_to_response('mytalk/showUserComments.html',{'uid':uid,'friend':friend,'talk':talk})
     
 '''删除用户uid的某个好友,返回的结果为一个true 或者是 false，true代表删除成功'''
 def deleteFriend(request):
     uid = ''
     if request.session.get('uid') == None or request.POST.get('username') == None:
-        return False
+        return HttpResponse("false")
     
-    return deleteUserFriend(uid,request.POST.get('username'))
+    uid = request.session.get('uid')
+    friendName = request.POST.get('username')
+    
+    if deleteUserFriend(uid,friendName):
+        return HttpResponse("true")
+    else:
+        return HttpResponse("false")
         
 '''用户注册'''
 def register(request):
@@ -550,8 +563,12 @@ def doRegister(request):
 def getStoreMessage(request):
     store = request.POST.get("store")
     page = int(request.POST.get('page'))
+    #print store
+    uid = ""
+    if request.session.get('uid') != None:
+        uid = request.session.get('uid')
     if store != "":
-        talk = getTheStoreMessage(store,page)
+        talk = getTheStoreMessage(store,page,uid)
     else:
         talk = getCommonComments(page)
     return render_to_response('mytalk/showUserComments.html',{'talk':talk})
@@ -592,7 +609,7 @@ def insertNewComment(request):
     visibility = int(request.POST.get('visibility'))
     
     if insert_new_comment(comment,store_name,uid,visibility):
-        talk = getTheStoreMessage(store_name,0)
+        talk = getTheStoreMessage(store_name,0,uid)
         return render_to_response('mytalk/showUserComments.html',{'talk':talk})
     else:
         return HttpResponse("")
@@ -637,7 +654,7 @@ def doSearch(request):
     message = []
     if content!="" and is_uid_name_valid(content):
         '''获得这个好友的评论'''    
-        if uid!="" and is_my_friend(uid, content):
+        if uid!="":
             talk = getUserComments(content, 0)
             if len(talk)>=2:
                 comment = talk[0]['comment']
@@ -647,16 +664,18 @@ def doSearch(request):
                 for i in range(1,len(comment2)):
                     comment2.pop()
             else:
-                comment = talk[0]['comment']
-                for i in range(2,len(comment)):
-                    comment.pop()
+                if len(talk) == 1:
+                    comment = talk[0]['comment']
+                    for i in range(2,len(comment)):
+                        comment.pop()
             message.append({'talk':talk,'type':'1'})
             
         if is_store_exist(content):
-            talk1 = getTheStoreMessage(content, 0)
-            comment1 = talk1[0]['comment']
-            for i in range(2,len(comment1)):
-                comment1.pop()
+            talk1 = getTheStoreMessage(content, 0,uid)
+            if len(talk1) > 0:
+                comment1 = talk1[0]['comment']
+                for i in range(2,len(comment1)):
+                    comment1.pop()
             message.append({'talk':talk1,'type':'0'})   
         return render_to_response('mytalk/search.html',{'message':message,'content':content})
     elif content == "":
@@ -666,9 +685,12 @@ def doSearch(request):
 
 ''''''
 def changeShopState(request):
+    uid = ""
+    if request.session.get('uid') != None:
+        uid = request.session.get('uid')
     store = request.POST.get('store')
     content = request.POST.get('content')
-    talk = getTheStoreMessage(store, 0)
+    talk = getTheStoreMessage(store, 0,uid)
     #return HttpResponse(talk)
     return render_to_response('mytalk/userComments.html',{'talk':talk,'content':content})
     
@@ -677,7 +699,7 @@ def beFriend(request):
     uid = ''
     if request.session.get('uid') == None:
         return render_to_response('mytalk/index.html',{'uid':uid})
-    
+    uid = request.session.get('uid')
     friendName = request.POST.get('username')
     if is_my_friend(uid, friendName):
         return HttpResponse("已成为好友")

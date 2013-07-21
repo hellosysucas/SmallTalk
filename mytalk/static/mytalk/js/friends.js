@@ -50,11 +50,13 @@ function showMessage(event){
 
 function deleteFriend(event){
     nowFriend = event.id;
-    $.post("../friends/deleteFriend",{'username':nowFriend},function(data){
-        if ( !data )
+    $.post('../friends/deleteFriend/',{'username':nowFriend},function(data){
+        if ( data == "false" )
             window.open("../","_self");
+        else
+            window.open('../friends/','_self');
     });
-    window.open("../friends/","_self");
+    //window.open('../friends/',"_self");
 }
 
 function showStoreMessage(event){
@@ -255,7 +257,7 @@ function searchFriend(){
             if (data.length > 0)
                 $("#showFL").html(data);
             else
-                $("#wrongChar").html("输入的用户名不是您的好友！");
+                $("#wrongChar1").html("输入的用户名不是您的好友！");
         });
     }
 }
