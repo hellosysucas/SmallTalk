@@ -463,7 +463,7 @@ def index(request):
         return render_to_response('index.html',{'uid':uid,"showError":"用户名或密码有误,若未注册，请先注册"})
     '''
     hostStore = getHostStore()
-    if request.session.get('uid') != None:
+    if request.session.get('uid') != None and len(request.session.get('uid')) > 0:
         uid = request.session.get('uid')
         friendsList = getFriendsList(uid,0)
         return render_to_response('mytalk/index.html',{'uid':uid,'friendsList':friendsList,'hostStore':hostStore})
