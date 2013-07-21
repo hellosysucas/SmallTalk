@@ -230,60 +230,6 @@ class GetUserMessageTest(TestCase):
             self.assertFalse(True)
 
 
-#test getFriendsList 函数
-class GetFriendsListTest(TestCase):
-    
-    pass
-
-
-#test getUserComments 函数
-class GetUserComments(TestCase):
-    def setUp(self):
-        User.objects.create(id='user', password='user')
-        User.objects.create(id='user2', password='user2')
-        Store.objects.create(name='store', place='abc', checked=True)
-        Store.objects.create(name='store1', place='abczxcv', checked=True)
-        content = 'asdfanzmxvaosi'
-        insert_new_comment(content, 'store', 'user', True)
-        insert_new_comment(content, 'store', 'user', False)
-        insert_new_comment(content, 'store1', 'user', False)
-        insert_new_comment(content, 'store1', 'user2', False)
-        
-    def test_0(self):
-        #用户名不存在
-        comments = getUserComments('user1')
-        self.assertEquals(len(comments), 0)
-    
-    def test_1(self):
-        #获取所有评论
-        comments = getUserComments('user')
-        self.assertEquals(len(comments), 2)
-        self.assertEquals(len(comments[0]['comment']), 2)
-        comments = getUserComments('user2')
-        self.assertEquals(len(comments), 1)
-
-
-#test getCommonComments 函数
-class GetCommonComments(TestCase):
-    def setUp(self):
-        User.objects.create(id='user', password='user')
-        User.objects.create(id='user2', password='user2')
-        Store.objects.create(name='store', place='abc', checked=True)
-        Store.objects.create(name='store1', place='abczxcv', checked=True)
-        content = 'asdfanzmxvaosi'
-        insert_new_comment(content, 'store', 'user', True)
-        insert_new_comment(content, 'store', 'user', False)
-        
-    def test_0(self):
-        insert_new_comment('vsdfge', 'store1', 'user2', True)
-        comments = getCommonComments()
-        self.assertEquals(len(comments), 2)
-    
-    def test_1(self):
-        insert_new_comment('zxcver', 'store1', 'user', False)
-        comments = getCommonComments()
-        self.assertEquals(len(comments), 1)
-
 #test insert_new_comment 函数
 class InsertNewCommentTest(TestCase):
     def setUp(self):
@@ -330,12 +276,328 @@ class InsertNewCommentTest(TestCase):
         self.assertTrue(suc)
         comments = user.comment_set.all()
         self.assertFalse(comments[1].visible )
+        
+        
+#test become_my_friend 函数
+class BecomeMyFriendTest(TestCase):
+    def setUp(self):
+        User.objects.create(id='user1', password='user1')
+        User.objects.create(id='user2', password='user2')
+    
+    def test_0(self):
+        #用户名不存在
+        res = become_my_friend('user1','user3')
+        self.assertFalse(res)
+    
+    def test_1(self):
+        res = become_my_friend('user1','user2')
+        self.assertTrue(res)
+        user1 = User.objects.get(id = 'user1')
+        user2 = User.objects.get(id = 'user2')
+        det = (user2 in user1.friends.all())
+        self.assertTrue(det)
+        det = user1 in user2.friends.all()
+        self.assertFalse(det)
 
 
+#test getTheStoreMessage(store,page) 函数
+class GetTheStoreMessageTest(TestCase):
+    def setUp(self):
+        User.objects.create(id='user', password='user')
+        Store.objects.create(name='store', place='afsdfasdf', checked=True)
+        insert_new_comment("sdfasfasd", 'store', 'user', True)
+        
+    def test_0(self):
+        #正常获取
+        res = getTheStoreMessage('store', 0)
+        self.assertEquals(len(res), 1)
+        
+        
+    def test_1(self):
+        #只列出可见的
+        insert_new_comment("zvergw", 'store', 'user', False)
+        res = getTheStoreMessage('store', 0)
+        self.assertEquals(len(res), 1)
+        self.assertEquals(len(res[0]['comment']), 1)
+        
+        insert_new_comment("zvergw", 'store', 'user', True)
+        res = getTheStoreMessage('store', 0)
+        self.assertEquals(len(res), 1)
+        self.assertEquals(len(res[0]['comment']), 2)
+        
+    def test_2(self):
+        #page不合法
+        res = getTheStoreMessage('store', 2)
+        self.assertEquals(len(res), 0)
 
 
+#test getFriendsList(uid,page)函数
+class GetFriendsListTest(TestCase):
+    def setUp(self):
+        User.objects.create(id='user1', password='user1')
+        User.objects.create(id='user2', password='user2')
+        User.objects.create(id='user3', password='user3')
+        become_my_friend('user1','user2')
+        become_my_friend('user1','user3')
+        become_my_friend('user2','user3')
+        
+    def test_0(self):
+        #测试功能
+        res = getFriendsList('user1', 0)
+        self.assertEquals(len(res), 2)
+        self.assertEquals(res[0], 'user2')
+        
+        res = getFriendsList('user2', 0)
+        self.assertEquals(len(res), 1)
+        self.assertEquals(res[0], 'user3')
+    
+    def test_1(self):
+        #测试合法性，page太大或为负
+        res = getFriendsList('user1', 1)
+        self.assertEquals(len(res), 0)
+        
+        res = getFriendsList('user1', -2)
+        self.assertEquals(len(res), 0)
+    
+    def test_2(self):
+        #测试合法性, 用户名不存在
+        res = getFriendsList('user3', 0)
+        self.assertEquals(len(res), 0)
 
 
+#test getFriendsSize(uid)函数
+class GetFriendsSizeTest(TestCase):
+    def setUp(self):
+        User.objects.create(id='user1', password='user1')
+        User.objects.create(id='user2', password='user2')
+        User.objects.create(id='user3', password='user3')
+        become_my_friend('user1','user2')
+        become_my_friend('user1','user3')
+        become_my_friend('user2','user3')
+        
+    def test_0(self):
+        #测试功能
+        res = getFriendsSize('user1')
+        self.assertEquals(res, 2)
+        
+        res = getFriendsSize('user2')
+        self.assertEquals(res, 1)
+        
+        res = getFriendsSize('user3')
+        self.assertEquals(res, 0)
+    
+    def test_1(self):
+        #用户名不存在
+        res = getFriendsSize('user4')
+        self.assertEquals(res, 0)
+
+
+#test getUserComments(uid, page) 函数
+class GetUserCommentsTest(TestCase):
+    def setUp(self):
+        User.objects.create(id='user', password='user')
+        User.objects.create(id='user2', password='user2')
+        Store.objects.create(name='store', place='abc', checked=True)
+        Store.objects.create(name='store1', place='abczxcv', checked=True)
+        content = 'asdfanzmxvaosi'
+        insert_new_comment(content, 'store', 'user', True)
+        insert_new_comment(content, 'store', 'user', False)
+        insert_new_comment(content, 'store1', 'user', False)
+        insert_new_comment(content, 'store1', 'user2', False)
+        
+    def test_0(self):
+        #用户名不存在
+        res = getUserComments('user1', 0)
+        self.assertEquals(len(res), 0)
+    
+    def test_1(self):
+        #获取所有评论
+        res = getUserComments('user', 0)
+        self.assertEquals(len(res), 2)
+        self.assertEquals(len(res[0]['comment']), 2)
+        res = getUserComments('user2', 0)
+        self.assertEquals(len(res), 1)
+    
+    def test_2(self):
+        #page不合法
+        res = getUserComments('user', 2)
+        self.assertEquals(len(res), 0)
+
+
+#test getCommonComments(page) 函数
+class GetCommonCommentsTest(TestCase):
+    def setUp(self):
+        User.objects.create(id='user', password='user')
+        User.objects.create(id='user2', password='user2')
+        Store.objects.create(name='store', place='abc', checked=True)
+        Store.objects.create(name='store1', place='abczxcv', checked=True)
+        content = 'asdfanzmxvaosi'
+        insert_new_comment(content, 'store', 'user', True)
+        
+    def test_0(self):
+        insert_new_comment('vsdfge', 'store1', 'user2', True)
+        res = getCommonComments(0)
+        self.assertEquals(len(res), 2)
+    
+    def test_1(self):
+        #返回格式测试
+        insert_new_comment('zxcver', 'store', 'user', True)
+        res = getCommonComments(0)
+        self.assertEquals(len(res), 1)
+        self.assertEquals(len(res[0]['comment']), 2)
+        
+    def test_2(self):
+        #不可见测试
+        insert_new_comment('vsdfge', 'store1', 'user', False)
+        res = getCommonComments(0)
+        self.assertEquals(len(res), 1)
+
+
+#test is_my_friend(uid,friendName) 函数
+class IsMyFriendTest(TestCase):
+    def setUp(self):
+        User.objects.create(id='user1', password='user1')
+        User.objects.create(id='user2', password='user2')
+        become_my_friend('user1','user2')
+    
+    def test_0(self):
+        #功能性测试
+        res = is_my_friend('user1', 'user2')
+        self.assertTrue(res)
+        
+    def test_1(self):
+        #单向测试
+        res = is_my_friend('user2', 'user1')
+        self.assertFalse(res)
+    
+    def test_2(self):
+        #用户名不存在
+        res = is_my_friend('user1', 'user0')
+        self.assertFalse(res)
+
+
+#test getHostStore 函数
+class GetHostStoreTest(TestCase):
+    def setUp(self):
+        User.objects.create(id='user', password='user')
+        Store.objects.create(name='store1', place='store1', checked=True)
+        Store.objects.create(name='store2', place='store2', checked=True)
+    
+    def test_0(self):
+        #功能性测试
+        res = getHostStore()
+        self.assertEquals(len(res), 2)
+        self.assertEquals(res[0]['name'], 'store1')
+    
+    def test_1(self):
+        #排序测试
+        res = getHostStore()
+        self.assertEquals(len(res), 2)
+        self.assertEquals(res[0]['name'], 'store1')
+        insert_new_comment("asdfasdf",'store2','user',True)
+        res = getHostStore()
+        self.assertEquals(res[0]['name'], 'store2')
+    
+    def test_2(self):
+        #新添加商户
+        Store.objects.create(name='store3', place='store3', checked=True)
+        res = getHostStore()
+        self.assertEquals(len(res), 3)
+        self.assertEquals(res[0]['name'], 'store1')
+        self.assertEquals(res[1]['name'], 'store2')
+    
+
+#test getPageStoreList(page) 函数
+class GetPageStoreListTest(TestCase):
+    def setUp(self):
+        Store.objects.create(name='store1', place='store1', checked=True)
+        Store.objects.create(name='store2', place='store2', checked=True)
+        Store.objects.create(name='store3', place='store3', checked=True)
+        Store.objects.create(name='store4', place='store4', checked=True)
+        Store.objects.create(name='store5', place='store5', checked=True)
+        Store.objects.create(name='store6', place='store6', checked=True)
+    
+    def test_0(self):
+        #功能性测试
+        res = getPageStoreList(0)
+        self.assertEquals(len(res), 4)
+        self.assertEquals(res[0], 'store1')
+        self.assertEquals(res[3], 'store4')
+    
+    def test_1(self):
+        #Page
+        res = getPageStoreList(1)
+        self.assertEquals(len(res), 2)
+        self.assertEquals(res[0], 'store5')
+        self.assertEquals(res[1], 'store6')
+        
+        res = getPageStoreList(2)
+        self.assertEquals(len(res), 0)
+
+
+#test insert_new_store(store_name,store_place)
+class InsertNewStoreTest(TestCase):
+    def test_0(self):
+        #功能性测试
+        insert_new_store('store1', 'store1')
+        stores = Store.objects.all()
+        flag = False
+        for store in stores:
+            if store.name == 'store1':
+                flag = True
+        self.assertTrue(flag)
+        
+    def test_1(self):
+        #已存在该商户
+        insert_new_store('store1', 'store1')
+        res = insert_new_store('store1', 'store1')
+        self.assertFalse(res)
+
+
+#test deleteUserFriend(uid,friend)
+class DeleteUserFriendTest(TestCase):
+    def setUp(self):
+        User.objects.create(id='u1', password='u1')
+        User.objects.create(id='u2', password='u2')
+        become_my_friend('u1', 'u2')
+        become_my_friend('u2', 'u1')
+    
+    def test_0(self):
+        #功能性测试
+        deleteUserFriend('u1', 'u2')
+        res = is_my_friend('u1', 'u2')
+        self.assertFalse(res)
+        res = is_my_friend('u2', 'u1')
+        self.assertTrue(res)
+    
+    def test_1(self):
+        #本来就不是朋友
+        User.objects.create(id='u3', password='u3')
+        res = deleteUserFriend('u1', 'u3')
+        self.assertTrue(res)
+    
+
+#test insert_new_user(email,uid,password)函数
+class InsertNewUserTest(TestCase):
+    def test_0(self):
+        #功能性测试
+        res = insert_new_user('u1', 'u1', 'u1')
+        self.assertTrue(res)
+        
+    def test_1(self):
+        #以存在该用户
+        insert_new_user('u1', 'u1', 'u1')
+        res = insert_new_user('u1', 'u1', 'u1')
+        self.assertFalse(res)
+    
+    def test_2(self):
+        #用户名或者密码不合法
+        res = insert_new_user('u1', 'u1sadfasdfasdfklasfjklwen,wnrf,nkvzk', 'u1')
+        #self.assertFalse(res)
+        #此处未检查参数合法性，不过在调用该函数的地方已经检查了合法性
+    
+
+#
 
 
 
