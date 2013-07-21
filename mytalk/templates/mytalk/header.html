@@ -20,7 +20,7 @@
 					<li class="active"><a href="../">首页</a></li>
 				</ul>
                 <div class="form-search navbar-form form-inline">
-                	<form class="span3 offset2" method="post" action="../search/">
+                	<form class="span3 offset2 input-append" method="post" action="../search/">
 						<input  placeholder="搜索商户或用户" type="text" name="content" id="searchContent" onkeyup="check_uname(this.value,'wrongChar')" class="input-medium search-query"/>
 						<input  type="submit" class="btn" value="搜索"/>
 							
@@ -29,7 +29,7 @@
 					</form>
 					<div class="pull-right">
 						{% ifnotequal uid "" %}
-						<strong><a class="navbar-link" href="../exchangeUserMessage">{{uid}}</a></strong>
+						<strong><a class="navbar-link" href="../exchangeUserMessage"></a></strong>
 						<i class="icon-user icon-white"> </i>{{uid}}</a></strong>
 						<a class="btn" href="../friends">好友管理</a>
 						{% else %}
