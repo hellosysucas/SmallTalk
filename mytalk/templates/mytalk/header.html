@@ -18,30 +18,19 @@
 				<!-- .nav, .navbar-search, .navbar-form, etc -->
 				<ul class="nav">
 					<li class="active"><a href="../">首页</a></li>
-					<!-- <li><a href="../">关于</a></li>
-					<li><a href="../">联系</a></li>
-					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#" >
-							其他 
-							<b class="caret"> </b>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="../">操作1</a></li>
-							<li><a href="../">操作2</a></li>
-							<li><a href="../">操作3</a></li>
-						</ul>
-					</li> -->
 				</ul>
                 <div class="form-search navbar-form form-inline">
-                	<div class="span3 offset2">
-						<input type="text" class="input-medium search-query">
-						<a  type="submit" class="btn" href="../search">
-							搜索
-						</a>
-					</div>
+                	<form class="span3 offset2" method="post" action="../search/">
+						<input  placeholder="搜索商户或用户" type="text" name="content" id="searchContent" onkeyup="check_uname(this.value,'wrongChar')" class="input-medium search-query"/>
+						<input  type="submit" class="btn" value="搜索"/>
+							
+						
+						<span id="wrongChar"></span>
+					</form>
 					<div class="pull-right">
 						{% ifnotequal uid "" %}
 						<strong><a class="navbar-link" href="../exchangeUserMessage">{{uid}}</a></strong>
+						<i class="icon-user icon-white"> </i>{{uid}}</a></strong>
 						<a class="btn" href="../friends">好友管理</a>
 						{% else %}
 						<a class="btn" href="../signIn">登录</a>

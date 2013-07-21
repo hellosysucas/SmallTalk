@@ -3,7 +3,7 @@
 from django.http import HttpResponse
 from urllib import unquote
 from django.template.loader import get_template
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.core.context_processors import csrf
 import hashlib
 import datetime, re
@@ -12,22 +12,127 @@ from django import forms
 from django.http import HttpResponseRedirect
 from mytalk.models import User,Store,Label,Comment,Reply
 
-# initia and test database
-def test(request):
-    insert_new_store("test", "here")
-    insert_new_store("test2", "there")
-    insert_new_store("test3", "there")
+#添加好友
+def become_my_friend(uid,friendName):
+    return True
+
     
-    '''
-    insert_new_comment("false", "test", "lc", False)
-    insert_new_comment("true", "test", "lc", True)
-    insert_new_comment("true2", "test2", "lc", True)
-    insert_new_comment("true3", "test2", "mt", True)
-    insert_new_comment("true4", "test2", "zp", True)
-    '''
+#获得某一个商店的所有评论信息,store 为商店名,最后返回一个只有一个元素的数组,方便函数重用,如果没有这个商店，返回一个空数组；同样每一页12个评论
+def getTheStoreMessage(store,page):
+    comment1 = ["good","very good","not bad","4"]
+    author1 = ['tom1','tom2','tom3','tom4']
+    theStore = {"name":store,"place":"guang zhou","comment":comment1,'author':author1}
     
-    return HttpResponse(getHostStore())
-    #return HttpResponse(getCommonComments())
+    talk = [theStore]
+    return talk
+
+    
+#获得用户uid的好友列表,每个页面显示9个好友，page从0开始,没有好友返回空数组
+def getFriendsList(uid,page):
+    friends = []
+    page = page * 9
+    try:
+        user = User.objects.get(id = uid)
+        friendsList = user.friends.order_by("id")
+        
+        for i in friendsList:
+            if i.id != uid:
+                friends.append(i.id)
+    except:
+        print uid + "errors in getFriendsList"
+    return friends[page : page + 9]
+
+#获得好友人数
+def getFriendsSize(uid):
+    try:
+        user = User.objects.get(id = uid)
+        return len(user.friends.all())
+    except:
+        print "errors in getFriendsSize"
+        return 0
+
+#获得某个人的所有评论过的商店的所有评论,按照商店显示；页数代表每一页显示12条评论，第0也代表0~11的评论，第1页代表12~23的评论，以商店为单位
+def getUserComments(uid,page):
+    talk = []
+    store_name = []
+    result = []
+    
+    page = page * 12
+    
+    try:
+        user = User.objects.get(id = uid)
+        comment = user.comment_set.all()
+        
+        for item in comment:
+            if store_name.count( item.store.name ) == 0:
+                comment_tmp = [item.content]
+                store = {"name": item.store.name, "place": item.store.place, "comment": comment_tmp}
+                
+                talk.append(store)
+                store_name.append(item.store.name)
+                
+            else:
+                index = store_name.index(item.store.name )
+                talk[index]["comment"].append(item.content)
+        
+        num = 0
+        for i in range( len(talk) ):
+            tmp = {"name": talk[i]["name"], "place": talk[i]["place"], "comment": [] }
+            for j in range ( len(talk[i]["comment"])) :
+                if num >= page and num < page + 12:
+                    tmp["comment"].append( talk[i]["comment"][j] )
+                num += 1
+            
+            if len(tmp["comment"]) != 0:
+                result.append(tmp)
+            
+            if num >= page + 12:
+                break
+                                  
+    except:
+        print "errors occurs in getUserComments"
+    
+    return result
+    
+#获得公开的所有商店的所有评论,注意，是公开显示的评论;每一页12个评论，第零页开始
+def getCommonComments(page):
+    talk = []
+    store_name = []
+    result = []
+    
+    page = page * 12
+    
+    try:
+        comment = Comment.objects.filter(visible = True)
+        
+        for item in comment:
+            if store_name.count( item.store.name ) == 0:
+                comment_tmp = [item.content]
+                store = {"name": item.store.name, "place": item.store.place, "comment": comment_tmp}
+                talk.append(store)
+                store_name.append(item.store.name)
+            else:
+                index = store_name.index(item.store.name )
+                talk[index]["comment"].append(item.content)
+                
+        num = 0
+        for i in range( len(talk) ):
+            tmp = {"name": talk[i]["name"], "place": talk[i]["place"], "comment": [] }
+            for j in range ( len(talk[i]["comment"])) :
+                if num >= page and num < page + 12:
+                    tmp["comment"].append( talk[i]["comment"][j] )
+                num += 1
+            
+            if len(tmp["comment"]) != 0:
+                result.append(tmp)
+            
+            if num >= page + 12:
+                break
+            
+    except:
+        print "errors occurs in getCommonComments"
+    
+    return result
 
 #判断用户名是否格式合法
 def is_uid_name_valid(uid):
@@ -128,69 +233,7 @@ def getUserMessage(uid):
     except:
         return {}
 
-#获得用户uid的好友列表
-def getFriendsList(uid):
-    friends = []
-    try:
-        user = User.objects.get(id = uid)
-        friendsList = user.friends.all()
-        
-        #print friendsList
-        for i in friendsList:
-            if i.id != uid:
-                friends.append(i.id)
-    except:
-        print uid + "more than one or does not exit"
-    return friends
 
-#获得某个人的所有评论过的商店的所有评论
-def getUserComments(uid):
-    talk = []
-    store_name = []
-    
-    try:
-        user = User.objects.get(id = uid)
-        comment = user.comment_set.all()
-        
-        for item in comment:
-            if store_name.count( item.store.name ) == 0:
-                comment_tmp = [item.content]
-                store = {"name": item.store.name, "place": item.store.place, "comment": comment_tmp}
-                talk.append(store)
-                store_name.append(item.store.name)
-            else:
-                index = store_name.index(item.store.name )
-                talk[index]["comment"].append(item.content)
-                
-        return talk
-    except:
-        print "errors occurs in getUserComments"
-    
-    return talk
-    
-#获得公开的所有商店的所有评论,注意，是公开显示的评论
-def getCommonComments():
-    talk = []
-    store_name = []
-
-    try:
-        comment = Comment.objects.filter(visible = True)
-        
-        for item in comment:
-            if store_name.count( item.store.name ) == 0:
-                comment_tmp = [item.content]
-                store = {"name": item.store.name, "place": item.store.place, "comment": comment_tmp}
-                talk.append(store)
-                store_name.append(item.store.name)
-            else:
-                index = store_name.index(item.store.name )
-                talk[index]["comment"].append(item.content)
-                
-        return talk
-    except:
-        print "errors occurs in getCommonComments"
-    
-    return talk    
 
 #插入一条新的评论，comment为评论内容，store_name为商店名，uid为用户，visibility为一个bool类型的值，True代表公共可见，False代表好友可见
 def insert_new_comment(comment,store_name,uid,visibility):
@@ -208,7 +251,19 @@ def insert_new_comment(comment,store_name,uid,visibility):
     except:
         print "errors occurs in getCommonComments"
         return False
+
+#判断friendName是否为uid的好友，true代表是好友关系
+def is_my_friend(uid,friendName):
+    try:
+        user = User.objects.get(id = uid)
+        if len( user.friends.filter(id = friendName) ) > 0:
+            return True
+        
+    except:
+        print "erros in is_my_friend"
     
+    return False
+
 #获取热门商店,以及评论
 def getHostStore():
     talk = []
@@ -247,27 +302,6 @@ def getPageStoreList(page):
         storeList.append(item.name)
     
     return storeList
-    
-#获得某一个商店的所有评论信息,store 为商店名,最后返回一个只有一个元素的数组,方便函数重用,如果没有这个商店，返回一个空数组
-def getTheStoreMessage(store):
-    talk = []
-    
-    try:
-        item = Store.objects.get(name = store)    #store name ?
-               
-        comments = item.comment_set.all()
-        comment_tmp = []
-     
-        for comment_item in comments:
-            comment_tmp.append(comment_item.content)
-        
-        store_tmp = {"name": item.name, "place": item.place, "comment": comment_tmp}
-            
-        talk.append(store_tmp)
-    except:
-        print "errors occurs in getTheStoreMessage"
-    
-    return talk
     
 #插入新的商店，插入成功返回true
 def insert_new_store(store_name,store_place):
@@ -344,7 +378,7 @@ def index(request):
     hostStore = getHostStore()
     if request.session.get('uid') != None:
         uid = request.session.get('uid')
-        friendsList = getFriendsList(uid)
+        friendsList = getFriendsList(uid,0)
         return render_to_response('mytalk/index.html',{'uid':uid,'friendsList':friendsList,'hostStore':hostStore})
     return render_to_response('mytalk/index.html',{'uid':uid,'hostStore':hostStore})
 
@@ -378,9 +412,9 @@ def friends(request):
         return render_to_response('mytalk/index.html',{'uid':uid})
 
     uid = request.session.get('uid')
-    myFriendsObj = getFriendsList(uid)
-    
-    return render_to_response('mytalk/friends.html',{'uid':uid,'friendsList':myFriendsObj})
+    myFriendsObj = getFriendsList(uid,0)
+    size = getFriendsSize(uid)
+    return render_to_response('mytalk/friends.html',{'uid':uid,'friendsList':myFriendsObj,'size':size})
     
 '''更改用户信息'''
 def exchangeUserMessage(request):
@@ -432,8 +466,9 @@ def message(request):
         
     uid = request.session.get('uid')
     friend = request.POST.get('username')
+    page = int(request.POST.get('page'))
     
-    talk = getUserComments(uid)
+    talk = getUserComments(uid,page)
     return render_to_response('mytalk/showUserComments.html',{'uid':uid,'friend':friend,'talk':talk})
     
 '''删除用户uid的某个好友,返回的结果为一个true 或者是 false，true代表删除成功'''
@@ -467,10 +502,11 @@ def doRegister(request):
 '''获得某一个商店的所有评论信息'''
 def getStoreMessage(request):
     store = request.POST.get("store")
+    page = int(request.POST.get('page'))
     if store != "":
-        talk = getTheStoreMessage(store)
+        talk = getTheStoreMessage(store,page)
     else:
-        talk = getCommonComments()
+        talk = getCommonComments(page)
     return render_to_response('mytalk/showUserComments.html',{'talk':talk})
 
 '''获得第几页的商店列表'''
@@ -478,7 +514,7 @@ def getStoreList(request):
     page = int(request.POST.get("page"))
     storeList = getPageStoreList(page)
     return render_to_response('mytalk/showStoreList.html',{'storeList':storeList})
-    
+
 '''商店是否存在，存在返回网页'''
 def isStoreExist(request):
     store_name = request.POST.get('store')
@@ -512,12 +548,96 @@ def insertNewComment(request):
         visibility = False
     
     if insert_new_comment(comment,store_name,uid,visibility):
-        talk = getTheStoreMessage(store_name)
+        talk = getTheStoreMessage(store_name,0)
         return render_to_response('mytalk/showUserComments.html',{'talk':talk})
     else:
         return HttpResponse("")
     
-def doSearch(request):
-    return render_to_response('mytalk/search.html')
+'''搜索好友'''
+def searchFriend(request):
+    uid = ''
+    if request.session.get('uid') == None:
+        return render_to_response('mytalk/index.html',{'uid':uid})
 
+    uid = request.session.get('uid')
+    friendName = request.POST.get('username')
+    
+    if is_my_friend(uid,friendName):
+        myFriendsObj = [friendName]
+        return render_to_response('mytalk/friendsOperate.html',{'friendsList':myFriendsObj})
+    else:
+        return HttpResponse("")
+ 
+'''更新好友列表'''
+def changeFriendsList(request):
+    uid = ''
+    if request.session.get('uid') == None:
+        return render_to_response('mytalk/index.html',{'uid':uid})
+    
+    uid = request.session.get('uid')
+    page = int(request.POST.get('page'))
+    
+    myFriendsObj = getFriendsList(uid, page)
+    return render_to_response('mytalk/friendsOperate.html',{'friendsList':myFriendsObj})
+
+'''处理搜索'''
+def doSearch(request):
+    if request.POST.get('content') == None:
+        content = ""
+    else:
+        content = request.POST.get('content')
+    
+    uid = ''
+    if request.session.get('uid') != None:
+        uid = request.session.get('uid')
+    message = []
+    if content!="" and is_uid_name_valid(content):
+        '''获得这个好友的评论'''    
+        if uid!="" and is_my_friend(uid, content):
+            talk = getUserComments(content, 0)
+            if len(talk)>=2:
+                comment = talk[0]['comment']
+                for i in range(1,len(comment)):
+                    comment.pop()
+                comment2 = talk[1]['comment']
+                for i in range(1,len(comment2)):
+                    comment2.pop()
+            else:
+                comment = talk[0]['comment']
+                for i in range(2,len(comment)):
+                    comment.pop()
+            message.append({'talk':talk,'type':'1'})
+            
+        if is_store_exist(content):
+            talk1 = getTheStoreMessage(content, 0)
+            comment1 = talk1[0]['comment']
+            for i in range(2,len(comment1)):
+                comment1.pop()
+            message.append({'talk':talk1,'type':'0'})   
+        return render_to_response('mytalk/search.html',{'message':message,'content':content})
+    elif content == "":
+        return render_to_response('mytalk/search.html')
+    else:
+        return HttpResponse("非法操作")
+
+''''''
+def changeShopState(request):
+    store = request.POST.get('store')
+    content = request.POST.get('content')
+    talk = getTheStoreMessage(store, 0)
+    #return HttpResponse(talk)
+    return render_to_response('mytalk/userComments.html',{'talk':talk,'content':content})
+    
+''''''
+def beFriend(request):
+    uid = ''
+    if request.session.get('uid') == None:
+        return render_to_response('mytalk/index.html',{'uid':uid})
+    
+    friendName = request.POST.get('username')
+    if is_my_friend(uid, friendName):
+        return HttpResponse("已成为好友")
+    else:
+        become_my_friend(uid,friendName)
+        return HttpResponse("成功添加")
     

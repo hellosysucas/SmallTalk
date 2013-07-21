@@ -1,6 +1,4 @@
 <!-- Modal -->
-<div id="shopModal" class="modal hide fade" tabindex="-1" role="dialog"
-aria-labelledby="shopModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal"
 		aria-hidden="true">
@@ -11,7 +9,7 @@ aria-labelledby="shopModalLabel" aria-hidden="true">
 				商户名
 			</p>
 			<p id="shopAdrModalLabel">
-				商户地址
+				商户地址{{ eachTalk.place }}
 			</p>
 		</div>
 	</div>
@@ -48,28 +46,28 @@ aria-labelledby="shopModalLabel" aria-hidden="true">
 		
 		<div class="pagination pagination-small pagination-centered">
 			<ul>
-				<li>
-					<a href="#">Prev</a>
-				</li>
-				<li>
-					<a href="#">1</a>
-				</li>
-				<li>
-					<a href="#">2</a>
-				</li>
-				<li>
-					<a href="#">3</a>
-				</li>
-				<li>
-					<a href="#">4</a>
-				</li>
-				<li>
-					<a href="#">5</a>
-				</li>
-				<li>
-					<a href="#">Next</a>
-				</li>
-			</ul>
+                <li>
+                    <a onclick="changePageList('0','0')">Prev</a>
+                </li>
+                <li>
+                    <a id="b_1" onclick="changeStoreList(this,'0')">1</a>
+                </li>
+                <li>
+                    <a id="b_2" onclick="changeStoreList(this,'0')">2</a>
+                </li>
+                <li>
+                    <a id="b_3" onclick="changeStoreList(this,'0')">3</a>
+                </li>
+                <li>
+                    <a id="b_4" onclick="changeStoreList(this,'0')">4</a>
+                </li>
+                <li>
+                    <a id="b_5" onclick="changeStoreList(this,'0')">5</a>
+                </li>
+                <li>
+                    <a onclick="changePageList('0','1')">Next</a>
+                </li>
+            </ul>
 		</div>
 	</div>
 	<div class="modal-footer">
@@ -80,4 +78,3 @@ aria-labelledby="shopModalLabel" aria-hidden="true">
 			确定
 		</button>
 	</div>
-</div>

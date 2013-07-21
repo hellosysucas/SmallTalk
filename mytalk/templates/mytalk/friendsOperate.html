@@ -1,0 +1,49 @@
+{% for each in friendsList%}
+{% if forloop.counter|add:"2"|divisibleby:"3" %}
+<div class="row-fluid">
+    <div class="span4">
+        <div class="row-fluid">
+            <div class="span5">
+                <img src="..." class="img-polaroid">
+            </div>
+            <div class="span7">
+                <div>{{ each }}</div>
+                <div class="pull-right">
+                    <button type="submit" class="btn" id="{{ each }}" onclick="deleteFriend(this)">取消关注</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+        {% if forloop.counter|add:"1"|divisibleby:"3" %}
+        <div class="span4">
+            <div class="row-fluid">
+                <div class="span5">
+                    <img src="..." class="img-polaroid">
+                </div>
+                <div class="span7">
+                    <div>{{ each }}</div>
+                    <div class="pull-right">
+                        <button type="submit" class="btn" id="{{ each }}" onclick="deleteFriend(this)">取消关注</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="span4">
+            <div class="row-fluid">
+                <div class="span5">
+                    <img src="..." class="img-polaroid">
+                </div>
+                <div class="span7">
+                    <div>{{ each }}</div>
+                    <div class="pull-right">
+                        <button type="submit" class="btn" id="{{ each }}" onclick="deleteFriend(this)">取消关注</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        {% endif %}
+    {% endif %}
+{% endfor %}

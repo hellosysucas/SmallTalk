@@ -1,6 +1,4 @@
 <!-- Modal -->
-<div id="userModal" class="modal hide fade" tabindex="-1" role="dialog"
-aria-labelledby="userModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal"
 		aria-hidden="true">
@@ -8,12 +6,30 @@ aria-labelledby="userModalLabel" aria-hidden="true">
 		</button>
 		<div class="row-fluid">
 			<p id="userModalLabel">
-				用户名
+				用户名{{ content }}
 			</p>
 		</div>
 	</div>
 
 	<div class="modal-body">
+	    {% for eachTalk in talk %}
+        {% for eachComment in eachTalk.comment %}
+		{% if forloop.counter|divisibleby:"2" %}
+			<li class="span6">
+				<div class="thumbnail">
+					<img class="span4" data-src="holder.js/160x120" alt=""
+					src="http://imgstatic.baidu.com/img/image/shouye/yiping1.jpg">
+
+					<div class="caption">
+						<h3>商户名 {{ each.name }}</h3>
+						<p>
+							最近的点评{{ eachComment }}
+						</p>
+					</div>
+				</div>
+			</li>
+        </ul>
+        {% else %}
 		<ul class="thumbnails">
 			<li class="span6">
 				<div class="thumbnail">
@@ -21,50 +37,39 @@ aria-labelledby="userModalLabel" aria-hidden="true">
 					src="http://imgstatic.baidu.com/img/image/shouye/yiping1.jpg">
 
 					<div class="caption">
-						<h3>商户名</h3>
+						<h3>商户名 {{ each.name }}</h3>
 						<p>
-							最近的点评
+							最近的点评{{ eachComment }}
 						</p>
 					</div>
 				</div>
 			</li>
-			<li class="span6">
-				<div class="thumbnail">
-					<img class="span4" data-src="holder.js/160x120" alt=""
-					src="http://imgstatic.baidu.com/img/image/shouye/yiping1.jpg">
-
-					<div class="caption">
-						<h3>商户名</h3>
-						<p>
-							最近的点评
-						</p>
-					</div>
-				</div>
-			</li>
-		</ul>
+		{% endif %}
+		{% endfor %}
+        {% endfor %}
 		
 		<div class="pagination pagination-small pagination-centered">
 			<ul>
 				<li>
-					<a href="#">Prev</a>
+					<a onclick="changePageList('0','0')">Prev</a>
 				</li>
 				<li>
-					<a href="#">1</a>
-				</li>
+                    <a id="b_1" onclick="changeStoreList(this,'0')">1</a>
+                </li>
+                <li>
+                    <a id="b_2" onclick="changeStoreList(this,'0')">2</a>
+                </li>
+                <li>
+                    <a id="b_3" onclick="changeStoreList(this,'0')">3</a>
+                </li>
+                <li>
+                    <a id="b_4" onclick="changeStoreList(this,'0')">4</a>
+                </li>
+                <li>
+                    <a id="b_5" onclick="changeStoreList(this,'0')">5</a>
+                </li>
 				<li>
-					<a href="#">2</a>
-				</li>
-				<li>
-					<a href="#">3</a>
-				</li>
-				<li>
-					<a href="#">4</a>
-				</li>
-				<li>
-					<a href="#">5</a>
-				</li>
-				<li>
-					<a href="#">Next</a>
+					<a onclick="changePageList('0','1')">Next</a>
 				</li>
 			</ul>
 		</div>
@@ -77,4 +82,3 @@ aria-labelledby="userModalLabel" aria-hidden="true">
 			确定
 		</button>
 	</div>
-</div>
