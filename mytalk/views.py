@@ -16,7 +16,7 @@ from mytalk.models import User, Store, Label, Comment, Reply
 
 # 判断用户名是否格式合法
 def is_uid_name_valid(uid):
-    pattern = re.compile(r'[A-Za-z0-9](\w|_| )*')
+    pattern = re.compile(ur'^[\u4e00-\u9fa5_a-zA-Z0-9]+$')
     
     if pattern.match(uid) and len(uid) <= 20:
         return True
