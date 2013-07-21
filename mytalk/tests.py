@@ -309,25 +309,25 @@ class GetTheStoreMessageTest(TestCase):
         
     def test_0(self):
         #正常获取
-        res = getTheStoreMessage('store', 0)
+        res = getTheStoreMessage('store', 0, 'user')
         self.assertEquals(len(res), 1)
         
         
     def test_1(self):
         #只列出可见的
         insert_new_comment("zvergw", 'store', 'user', False)
-        res = getTheStoreMessage('store', 0)
-        self.assertEquals(len(res), 1)
-        self.assertEquals(len(res[0]['comment']), 1)
-        
-        insert_new_comment("zvergw", 'store', 'user', True)
-        res = getTheStoreMessage('store', 0)
+        res = getTheStoreMessage('store', 0, 'user')
         self.assertEquals(len(res), 1)
         self.assertEquals(len(res[0]['comment']), 2)
         
+        insert_new_comment("zvergw", 'store', 'user', True)
+        res = getTheStoreMessage('store', 0, 'user')
+        self.assertEquals(len(res), 1)
+        self.assertEquals(len(res[0]['comment']), 3)
+        
     def test_2(self):
         #page不合法
-        res = getTheStoreMessage('store', 2)
+        res = getTheStoreMessage('store', 2, 'user')
         self.assertEquals(len(res), 0)
 
 
