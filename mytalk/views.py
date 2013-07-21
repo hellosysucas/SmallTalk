@@ -10,7 +10,7 @@ import datetime, re
 import time
 from django import forms
 from django.http import HttpResponseRedirect
-from mytalk.models import User,Store,Label,Comment,Reply,LabelInline,StoreAdmin
+from mytalk.models import User,Store,Label,Comment,Reply
 
 # initia and test database
 def test(request):
@@ -39,7 +39,7 @@ def is_uid_name_valid(uid):
     
 #判断邮箱格式是否合法
 def is_email_name_valid(email):
-    pattern = re.compile(r'\w*@(\w)+.(com|cn|org)')
+    pattern = re.compile(r'\w*@(\w)+.(com|cn|com.cn)')
     
     if pattern.match(email):
         return True
@@ -126,7 +126,7 @@ def getUserMessage(uid):
         user = User.objects.get(id = uid)
         return {'uid':user.id, 'email':user.email}
     except:
-        return {'uid':uid, 'email':''}
+        return {}
 
 #获得用户uid的好友列表
 def getFriendsList(uid):
@@ -135,7 +135,7 @@ def getFriendsList(uid):
         user = User.objects.get(id = uid)
         friendsList = user.friends.all()
         
-        print friendsList
+        #print friendsList
         for i in friendsList:
             if i.id != uid:
                 friends.append(i.id)
@@ -192,7 +192,7 @@ def getCommonComments():
     
     return talk    
 
-#插入一条新的评论，comment为评论内容，store_name为商店名，uid为用户，visibility为一个int类型的值，1代表公共可见，0代表好友可见
+#插入一条新的评论，comment为评论内容，store_name为商店名，uid为用户，visibility为一个bool类型的值，True代表公共可见，False代表好友可见
 def insert_new_comment(comment,store_name,uid,visibility):
     try:
         user = User.objects.get(id = uid)
@@ -203,7 +203,7 @@ def insert_new_comment(comment,store_name,uid,visibility):
                             content = comment,
                             visible = visibility
                           )
-        comment.save() 
+        comment.save()
         return True
     except:
         print "errors occurs in getCommonComments"
@@ -506,7 +506,10 @@ def insertNewComment(request):
     comment = request.POST.get('comment')
     store_name = request.POST.get('store')
     uid = request.session.get('uid')
-    visibility = int(request.POST.get('visibility'))
+    if request.POST.get('visibility') == '1':
+        visibility = True
+    else:
+        visibility = False
     
     if insert_new_comment(comment,store_name,uid,visibility):
         talk = getTheStoreMessage(store_name)
